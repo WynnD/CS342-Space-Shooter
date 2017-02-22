@@ -1,0 +1,7 @@
+Schedule and deliverable:
+  Arrow key listeners -- Wed 03/01 by 11pm (estimate: 1 hr)
+  Space bar listener -- Wed 03/01 by 11pm (estimate: 1 hr)
+  Shapeship interface outline with variables -- Wed 03/01 by 11pm (estimate 2 hrs)
+  Create a Timer class -- Fri 03/03 by 11pm (estimate 1 hr)
+  Create a basic shape to act as a spaceship -- Thurs 03/02 by 11pm (estimate 2 hrs)
+  
