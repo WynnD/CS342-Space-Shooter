@@ -2,5 +2,6 @@ Schedule and deliverable:
   -Client class (handles display) --Wed 3/06 by 5pm (estimate: 2 hrs)
   -Update arrow key listeners to move spaceship (then display) --Wed 3/06 by 5pm (estimate: 1 hrs)
   -Main menu --Fri 3/10 by 5pm(estimate: 2 hrs)
+  -Projectile and shooting mechanic --Wed 3/06 by 5pm (estimate: 3 hrs)
   
   
