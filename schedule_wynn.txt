@@ -1,6 +1,6 @@
 Schedule and deliverable:
 
-  -Projectile interface -- Friday 3/3 (estimate: 3 hr)
+  -Projectile abstract class -- Friday 3/3 (estimate: 3 hr)
     -Extended by simple Bullet object -- Monday 3/6 (estimate: 1/2 hr)
     -Build move() interface which all projectiles will implement -- Monday 3/6 (estimate: 4 hr)
     
