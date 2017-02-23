@@ -1,0 +1,11 @@
+Schedule and deliverable:
+
+  -Projectile interface -- Friday 3/3 (estimate: 3 hr)
+    -Extended by simple Bullet object -- Monday 3/6 (estimate: 1/2 hr)
+    -Build move() interface which all projectiles will implement -- Monday 3/6 (estimate: 4 hr)
+    
+  -EnemyShip subclass of SpaceShip -- Monday 3/6 (estimate: 3 hr)
+    *NOTE* will begin as soon as Noemi completes abstract Spaceship class
+
+  -Rough menu page layout/displaying -- Friday 3/10 (estimate: 7 hr)
+    *NOTE* will work with Deon on this
