@@ -39,19 +39,29 @@ class GalacticOverdrive extends JPanel implements KeyListener{
 	 {
 		 y += valToAdd;
 	 }
+	 
+	 public void clearPanel()
+	 {
+		 Graphics gg = getGraphics();
+		 gg.setColor(Color.black);
+		 gg.fillRect(0, 0, width, height);
+	 }
+	 
+	 public void updatePanel()
+	 {
+		  Graphics gg = getGraphics();
+		  gg.setColor(Color.blue);
+		  x = this.getX();
+		  y = this.getY();
+		  gg.fillRect(x, y, 30, 20);
+	 }
 	
     public void keyTyped(KeyEvent e) {
         System.out.println("keyTyped: "+e);
     }
     public void keyPressed(KeyEvent e) {
      if(e.getKeyCode() == KeyEvent.VK_SPACE){
-	      Graphics gg = getGraphics();
-		  gg.setColor(Color.black);
-		  gg.fillRect(0, 0, width, height);
-		  gg.setColor(Color.blue);
-		  x = this.getX();
-		  y = this.getY();
-		  gg.fillRect(x, y, 30, 20);
+    	 updatePanel();
      }
      else if(e.getKeyCode() == KeyEvent.VK_UP)
      {
@@ -77,18 +87,26 @@ class GalacticOverdrive extends JPanel implements KeyListener{
     }
     
     public static void main(String[] args) {
-        new MyFrame();
+        MyFrame gameFrame = new MyFrame();
+        Timer tt = new Timer();
+        
+        
+ 	   
+ 	    MyTimer task = new MyTimer(gameFrame.getGO());
+ 	   
+ 	    tt.schedule(task, 0,100); 
     }
 }
 
 class MyFrame extends JFrame {
 	static Graphics gg = null;
+	GalacticOverdrive gamePanel = null;
 	 
     public MyFrame() {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(400,300);
 
-        GalacticOverdrive gamePanel = new GalacticOverdrive(); //create the game panel
+        gamePanel = new GalacticOverdrive(); //create the game panel
         gamePanel.setBackground(Color.black);
         gamePanel.setBounds(0, 0, 400, 300);
         gamePanel.setSize(400,300);
@@ -98,6 +116,11 @@ class MyFrame extends JFrame {
 
         add(gamePanel);
         setVisible(true);
+    }
+    
+    public GalacticOverdrive getGO()
+    {
+    	return gamePanel;
     }
 
 }
