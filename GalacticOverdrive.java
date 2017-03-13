@@ -61,7 +61,7 @@ class GalacticOverdrive extends JPanel implements KeyListener{
     }
     public void keyPressed(KeyEvent e) {
      if(e.getKeyCode() == KeyEvent.VK_SPACE){
-    	 updatePanel();
+    	System.out.println("space bar pressed");
      }
      else if(e.getKeyCode() == KeyEvent.VK_UP)
      {
