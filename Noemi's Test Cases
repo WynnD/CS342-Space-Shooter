@@ -1,0 +1,43 @@
+public void testAddSpaceship()
+{
+    xPos = 50;
+    yPos = 50;
+    width = 50;
+    height = 50;
+    SpaceShip newShip = new SpaceShip(xPos, yPos, width, height);
+		ships.add(numShips, newShip);
+     
+     if(ships[numShips] != null)
+     {
+       System.out.println("Spaceship has been added");
+     }
+}
+
+//tests if the space bar has been pressed
+public void keyPressed(KeyEvent e) {
+     if(e.getKeyCode() == KeyEvent.VK_SPACE){
+    	 System.out.println("space bar pressed");
+     }
+}
+
+public void testClearPanel()
+{
+     Graphics gg = getGraphics();
+		 gg.setColor(Color.black);
+		 gg.fillRect(0, 0, width, height);
+     System.out.println("panel has been cleared");
+
+}
+
+//tests displaying a spaceship
+public void testDisplaySpaceship()
+{
+     xPos = 50;
+     yPos = 50;
+     width = 50;
+     height = 50;
+     SpaceShip newShip = new SpaceShip(xPos, yPos, width, height);
+		 ships.add(numShips, newShip);
+     ship[numShips].display();
+     System.out.println("Spaceship will display");
+ }
