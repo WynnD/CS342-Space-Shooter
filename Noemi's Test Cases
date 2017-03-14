@@ -1,43 +1,105 @@
-public void testAddSpaceship()
-{
-    xPos = 50;
-    yPos = 50;
-    width = 50;
-    height = 50;
-    SpaceShip newShip = new SpaceShip(xPos, yPos, width, height);
-		ships.add(numShips, newShip);
-     
-     if(ships[numShips] != null)
-     {
-       System.out.println("Spaceship has been added");
-     }
+
+import java.awt.Graphics;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import java.util.*;
+
+public class PanelFrameTestClass{
+	
+	public PanelFrameTestClass()
+	{
+		
+	}
+	
+	public void testPanel()
+	{
+		//will print "Panel Created" if successful
+		MyPanel gamePanel = new MyPanel();
+	}
+	
+	public void testAddShip()
+	{
+		MyPanel gamePanel = new MyPanel();
+		if(gamePanel.addShip())
+		{
+			System.out.println("ship has been added");
+		}
+	}
+	
+	public void testClearPanel()
+	{
+		MyPanel gamePanel = new MyPanel();
+		if(gamePanel.clearPanel())
+		{
+			System.out.println("Panel cleared");
+		}
+	}
+	
+	public void testUpdatePanel()
+	{
+		MyPanel gamePanel = new MyPanel();
+		if(gamePanel.updatePanel())
+		{
+			System.out.println("Panel updated");
+		}
+	}
+	
+	public void testFrame()
+	{
+		MyFrame gameFrame = new MyFrame();
+		if(gameFrame.getGamePanel())
+		{
+			System.out.println("Panel gotten from frame");
+		}
+	
+	public static void main(String[] args) {
+   
+   	 }
+
 }
 
-//tests if the space bar has been pressed
-public void keyPressed(KeyEvent e) {
-     if(e.getKeyCode() == KeyEvent.VK_SPACE){
-    	 System.out.println("space bar pressed");
-     }
+public class MyPanel extends JPanel{
+
+	 ArrayList<SpaceShip> ships;
+	 private int numShips;
+	 
+	 public MyPanel() {
+		 numShips = 0;
+		
+		 System.out.println("Panel Created");
+	 }
+	 
+	 public boolean addShip()
+	 {
+		return true;
+	 }
+
+	 public boolean clearPanel()
+	 {
+		return true;
+	 }
+	 
+	 public boolean updatePanel()
+	 {
+		return true;
+	 }
+
 }
 
-public void testClearPanel()
-{
-     Graphics gg = getGraphics();
-		 gg.setColor(Color.black);
-		 gg.fillRect(0, 0, width, height);
-     System.out.println("panel has been cleared");
+class MyFrame extends JFrame {
+	static Graphics gg = null;
+	MyPanel gamePanel = null;
+	 
+    public MyFrame() {
+	//create Game Frame here
+	System.out.println("Game frame created");
+    }
+    
+    public boolean getGamePanel()
+    {
+    	//will return the Game Panel
+	
+	return true;
+    }
 
 }
-
-//tests displaying a spaceship
-public void testDisplaySpaceship()
-{
-     xPos = 50;
-     yPos = 50;
-     width = 50;
-     height = 50;
-     SpaceShip newShip = new SpaceShip(xPos, yPos, width, height);
-		 ships.add(numShips, newShip);
-     ship[numShips].display();
-     System.out.println("Spaceship will display");
- }
