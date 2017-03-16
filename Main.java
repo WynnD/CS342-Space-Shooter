@@ -1,6 +1,9 @@
 //CS342 space shooter
-/* IMPLEMENTED SO FAR: Key listeners, canvas, background image, player object(currently just rectangle) */
+// IMPLEMENTED SO FAR: Key listeners, canvas, background image, player object(currently just rectangle) 
 //A blue rectangle appears on starry background and can be moved with arrow keys
+
+//TO DO: Timer to refresh and draw objects, add menu pane, bound checking, switch rectangle to spaceship (spaceShip class)
+//        collisionClass, weaponClass, moveBehavior...
 
 
 
