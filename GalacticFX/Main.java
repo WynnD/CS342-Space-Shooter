@@ -14,8 +14,11 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import java.io.File;
 
-//TODO: weapons/shooting, main menu, moveBehavior, timer(animationTimer?), bound/collision checking,
+//TODO: weapons/shooting, main menu(stackpanel/vbox?), moveBehavior, timer(animationTimer?), bound/collision checking,
 //TODO: upgrades(in weaponClass?), levels, scoring, save/pause, sound effects
+//**priority: enemy movement, timer, main menu, shooting, collision detection
+
+//ISSUE: panel is resized but image/canvas are not
 
 public class Main extends Application {
 
@@ -23,13 +26,15 @@ public class Main extends Application {
     public void start(Stage primaryStage){
 
         //music to be played during game
-        String musicFile = "FunTheme.mp3";
+        String musicFile = "spaceMusic.mp3";
         Media sound = new Media(new File(musicFile).toURI().toString());
         MediaPlayer mediaPlayer = new MediaPlayer(sound);
+        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE); //loops music 
         mediaPlayer.play();
 
         //set background image
-        Image background = new Image("http://1-background.com/images/stars-1/starry-night-purple-tile.jpg");
+        //Image background = new Image("http://1-background.com/images/stars-1/starry-night-purple-tile.jpg");
+        Image background = new Image("http://orig10.deviantart.net/dda0/f/2014/285/2/f/free_for_use_galaxy_background_by_duskydeer-d82jaky.png");
         ImageView imgView = new ImageView(background);
         double width = background.getWidth();
         double height = background.getHeight();
@@ -50,11 +55,16 @@ public class Main extends Application {
 
         ArrayList<Spaceship> ships = new ArrayList<Spaceship>();
 
-        Image spImage = new Image("https://3.bp.blogspot.com/-jGC08Dy0zg8/U405cNq1-MI/AAAAAAAABqU/38d5rmV1S8Y/s1600/redfighter0006.png");
-        Spaceship userShip = new Spaceship(spImage, 100, 100, 60, 60);
+        int midScreen = (int) ((width)/2) - 60;
 
-        Image spImage2 = new Image("http://3.bp.blogspot.com/-mKR21lEuHoc/Uc850TNIW3I/AAAAAAAAAr4/8mzOxikZ7EE/s302/aliensprite2.png");
-        Spaceship enemyShip = new Spaceship(spImage2, 100, 20, 60, 60);
+
+        //Image spImage = new Image("https://3.bp.blogspot.com/-jGC08Dy0zg8/U405cNq1-MI/AAAAAAAABqU/38d5rmV1S8Y/s1600/redfighter0006.png");
+        Image spImage = new Image("http://opengameart.org/sites/default/files/ship_0.png");
+        Spaceship userShip = new Spaceship(spImage, midScreen, 300, 60, 60);
+
+        //Image spImage2 = new Image("http://3.bp.blogspot.com/-mKR21lEuHoc/Uc850TNIW3I/AAAAAAAAAr4/8mzOxikZ7EE/s302/aliensprite2.png");
+        Image spImage2 = new Image("https://s-media-cache-ak0.pinimg.com/originals/68/0c/d4/680cd456acb325c4918cbe672a839522.png");
+        Spaceship enemyShip = new Spaceship(spImage2, midScreen, 20, 60, 60);
 
         ships.add(userShip);
         ships.add(enemyShip);
@@ -62,6 +72,7 @@ public class Main extends Application {
         drawShips(graphicsContext, ships);
 
         //key listeners for arrow keys
+        //currently can't press space and arrow at same time
         scene.setOnKeyPressed(e ->{
             if(e.getCode() == KeyCode.RIGHT){
                 graphicsContext.clearRect(0, 0, width, height); //clears entire canvas
@@ -107,3 +118,4 @@ public class Main extends Application {
         }
     }
 }
+
