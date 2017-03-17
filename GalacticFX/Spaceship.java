@@ -8,6 +8,7 @@ public class Spaceship {
 
     private Image spImage;
     private int x, y, w, h;
+    //private boolean isAlive; //this can be changed when collision occurs then it can be deleted from list
 
     public Spaceship(Image image, int x, int y, int w, int h)
     {
