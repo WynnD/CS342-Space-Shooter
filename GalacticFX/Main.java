@@ -29,11 +29,11 @@ public class Main extends Application {
         String musicFile = "spaceMusic.mp3";
         Media sound = new Media(new File(musicFile).toURI().toString());
         MediaPlayer mediaPlayer = new MediaPlayer(sound);
-        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE); //loops music 
+        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE); //loops music
         mediaPlayer.play();
 
         //set background image
-        //Image background = new Image("http://1-background.com/images/stars-1/starry-night-purple-tile.jpg");
+
         Image background = new Image("http://orig10.deviantart.net/dda0/f/2014/285/2/f/free_for_use_galaxy_background_by_duskydeer-d82jaky.png");
         ImageView imgView = new ImageView(background);
         double width = background.getWidth();
@@ -57,14 +57,13 @@ public class Main extends Application {
 
         int midScreen = (int) ((width)/2) - 60;
 
+        Image userImage = new Image("http://opengameart.org/sites/default/files/ship_0.png");
+        ImageView userImageView = new ImageView(userImage);
+        Spaceship userShip = new Spaceship(userImageView, midScreen, 300, 60, 60);
 
-        //Image spImage = new Image("https://3.bp.blogspot.com/-jGC08Dy0zg8/U405cNq1-MI/AAAAAAAABqU/38d5rmV1S8Y/s1600/redfighter0006.png");
-        Image spImage = new Image("http://opengameart.org/sites/default/files/ship_0.png");
-        Spaceship userShip = new Spaceship(spImage, midScreen, 300, 60, 60);
-
-        //Image spImage2 = new Image("http://3.bp.blogspot.com/-mKR21lEuHoc/Uc850TNIW3I/AAAAAAAAAr4/8mzOxikZ7EE/s302/aliensprite2.png");
-        Image spImage2 = new Image("https://s-media-cache-ak0.pinimg.com/originals/68/0c/d4/680cd456acb325c4918cbe672a839522.png");
-        Spaceship enemyShip = new Spaceship(spImage2, midScreen, 20, 60, 60);
+        Image enemyImage = new Image("https://s-media-cache-ak0.pinimg.com/originals/68/0c/d4/680cd456acb325c4918cbe672a839522.png");
+        ImageView enemyImageView = new ImageView(enemyImage);
+        Spaceship enemyShip = new Spaceship(enemyImageView, midScreen, 20, 60, 60);
 
         ships.add(userShip);
         ships.add(enemyShip);
@@ -76,6 +75,10 @@ public class Main extends Application {
         scene.setOnKeyPressed(e ->{
             if(e.getCode() == KeyCode.RIGHT){
                 graphicsContext.clearRect(0, 0, width, height); //clears entire canvas
+
+                //just trying out a way to check for collisions, needs fixing
+                //userShip.getImageView().getBoundsInParent().intersects(enemyShip.getImageView().getBoundsInParent())
+
                 userShip.setX(userShip.getX() + 5);
                 drawShips(graphicsContext, ships);
             }
@@ -118,4 +121,3 @@ public class Main extends Application {
         }
     }
 }
-
