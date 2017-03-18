@@ -2,17 +2,18 @@ package Game;
 
 import javafx.scene.image.Image;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.ImageView;
 
 
 public class Spaceship {
 
-    private Image spImage;
+    private ImageView shipImage;
     private int x, y, w, h;
-    //private boolean isAlive; //this can be changed when collision occurs then it can be deleted from list
+    //private boolean isAlive; //this can be changed when collision occurs then spaceship can be deleted from list
 
-    public Spaceship(Image image, int x, int y, int w, int h)
+    public Spaceship(ImageView imageView, int x, int y, int w, int h)
     {
-        this.spImage = image;
+        this.shipImage = imageView;
         this.x = x;
         this.y = y;
         this.w = w;
@@ -21,7 +22,11 @@ public class Spaceship {
 
     public void drawShip(GraphicsContext gc)
     {
-        gc.drawImage(spImage, x, y, w, h);
+        gc.drawImage(shipImage.getImage(), x, y, w, h);
+    }
+
+    public ImageView getImageView() {
+        return shipImage;
     }
 
     public int getX()
