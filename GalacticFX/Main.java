@@ -1,14 +1,19 @@
 package Game;
 
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.scene.input.KeyCode;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.animation.AnimationTimer;
+
+import java.awt.event.KeyListener;
 import java.util.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -42,7 +47,6 @@ public class Main extends Application {
         //create canvas with size of background image
         Canvas canvas = new Canvas(width, height);
         GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
-
         //create stackpane for background image and canvas
         StackPane sp = new StackPane();
         sp.getChildren().addAll(imgView, canvas);
@@ -51,66 +55,52 @@ public class Main extends Application {
 
         primaryStage.setTitle("Galactic Overdrive 3000");
         primaryStage.setScene(scene);
-        primaryStage.show();
+
+
+        KeyListen keyListener = new KeyListen(scene);
 
         ArrayList<Spaceship> ships = new ArrayList<Spaceship>();
 
-        int midScreen = (int) ((width)/2) - 60;
+        int midScreen = (int) ((width)/2);
 
-        Image userImage = new Image("http://opengameart.org/sites/default/files/ship_0.png");
-        ImageView userImageView = new ImageView(userImage);
-        Spaceship userShip = new Spaceship(userImageView, midScreen, 300, 60, 60);
-
+        ShipFactory factory = new ShipFactory();
+        Spaceship userShip = factory.makeShip("User", graphicsContext, keyListener);
+        userShip.setX(midScreen);
+        userShip.setY(300);
         Image enemyImage = new Image("https://s-media-cache-ak0.pinimg.com/originals/68/0c/d4/680cd456acb325c4918cbe672a839522.png");
         ImageView enemyImageView = new ImageView(enemyImage);
-        Spaceship enemyShip = new Spaceship(enemyImageView, midScreen, 20, 60, 60);
+        //Spaceship enemyShip = new Spaceship(enemyImageView, midScreen, 20, 60, 60);
 
         ships.add(userShip);
-        ships.add(enemyShip);
+        //ships.add(enemyShip);
 
-        drawShips(graphicsContext, ships);
 
-        //key listeners for arrow keys
-        //currently can't press space and arrow at same time
-        scene.setOnKeyPressed(e ->{
-            if(e.getCode() == KeyCode.RIGHT){
-                graphicsContext.clearRect(0, 0, width, height); //clears entire canvas
 
-                //just trying out a way to check for collisions, needs fixing
-                //userShip.getImageView().getBoundsInParent().intersects(enemyShip.getImageView().getBoundsInParent())
+        new AnimationTimer(){
+            public void handle(long currentNanoTime){
+                updateShips(graphicsContext, keyListener, ships);    //Move ships and/or have the ships shoot
+                graphicsContext.clearRect(0,0, width, height);  //Wipe Screen of all ships
+                drawShips(graphicsContext, ships);                   //Draw updated ships
+            }
+        }.start();
 
-                userShip.setX(userShip.getX() + 5);
-                drawShips(graphicsContext, ships);
-            }
-            else if(e.getCode() == KeyCode.LEFT) {
-                graphicsContext.clearRect(0, 0, width, height); //clears entire canvas
-                userShip.setX(userShip.getX() - 5);
-                drawShips(graphicsContext, ships);
-            }
-            else if(e.getCode() == KeyCode.UP){
-                graphicsContext.clearRect(0, 0, width, height); //clears entire canvas
-                userShip.setY(userShip.getY() - 5);
-                drawShips(graphicsContext, ships);
-            }
-            else if(e.getCode() == KeyCode.DOWN){
-                graphicsContext.clearRect(0, 0, width, height); //clears entire canvas
-                userShip.setY(userShip.getY() + 5);
-                drawShips(graphicsContext, ships);
-            }
-            else if(e.getCode() == KeyCode.SPACE)
-            {
-                //shooting sound effect
-                String musicFile2 = "shooting.mp3";
-                Media sound2 = new Media(new File(musicFile2).toURI().toString());
-                MediaPlayer mediaPlayer2 = new MediaPlayer(sound2);
-                mediaPlayer2.play();
-            }
-        });
+
+        primaryStage.show();
+
     }
 
 
     public static void main(String[] args){
         launch(args);
+    }
+
+    public void updateShips(GraphicsContext gc, KeyListen keyListener, ArrayList<Spaceship> ships){
+
+        for(Spaceship s: ships)
+        {
+            s.tryToMove(gc,keyListener);
+            s.tryToShoot(gc,keyListener);
+        }
     }
 
     public void drawShips(GraphicsContext gc, ArrayList<Spaceship> ships)
