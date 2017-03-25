@@ -1,6 +1,7 @@
 package Game;
 
 import javafx.application.Application;
+import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -18,7 +19,12 @@ import java.io.File;
 //TODO: upgrades(in weaponClass?), levels, scoring, save/pause, sound effects
 //**priority: enemy movement, timer, main menu, shooting, collision detection
 
-//ISSUE: panel is resized but image/canvas are not
+/*
+    Timer()
+        clearCanvas
+        moveShips - this will move enemies, user coordinates updated from listener
+        drawShips
+ */
 
 public class Main extends Application {
 
@@ -33,7 +39,6 @@ public class Main extends Application {
         mediaPlayer.play();
 
         //set background image
-
         Image background = new Image("http://orig10.deviantart.net/dda0/f/2014/285/2/f/free_for_use_galaxy_background_by_duskydeer-d82jaky.png");
         ImageView imgView = new ImageView(background);
         double width = background.getWidth();
@@ -71,31 +76,21 @@ public class Main extends Application {
         drawShips(graphicsContext, ships);
 
         //key listeners for arrow keys
-        //currently can't press space and arrow at same time
         scene.setOnKeyPressed(e ->{
             if(e.getCode() == KeyCode.RIGHT){
-                graphicsContext.clearRect(0, 0, width, height); //clears entire canvas
-
                 //just trying out a way to check for collisions, needs fixing
                 //userShip.getImageView().getBoundsInParent().intersects(enemyShip.getImageView().getBoundsInParent())
 
                 userShip.setX(userShip.getX() + 5);
-                drawShips(graphicsContext, ships);
             }
             else if(e.getCode() == KeyCode.LEFT) {
-                graphicsContext.clearRect(0, 0, width, height); //clears entire canvas
                 userShip.setX(userShip.getX() - 5);
-                drawShips(graphicsContext, ships);
             }
             else if(e.getCode() == KeyCode.UP){
-                graphicsContext.clearRect(0, 0, width, height); //clears entire canvas
                 userShip.setY(userShip.getY() - 5);
-                drawShips(graphicsContext, ships);
             }
             else if(e.getCode() == KeyCode.DOWN){
-                graphicsContext.clearRect(0, 0, width, height); //clears entire canvas
                 userShip.setY(userShip.getY() + 5);
-                drawShips(graphicsContext, ships);
             }
             else if(e.getCode() == KeyCode.SPACE)
             {
@@ -106,6 +101,14 @@ public class Main extends Application {
                 mediaPlayer2.play();
             }
         });
+
+        new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                graphicsContext.clearRect(0, 0, width, height); //clears entire canvas
+                drawShips(graphicsContext, ships);
+            }
+        }.start();
     }
 
 
