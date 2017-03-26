@@ -24,7 +24,7 @@ import java.util.*;
 public class Main extends Application {
 
     @Override
-    public void start(Stage primaryStage){
+    public void start(Stage primaryStage) {
 
         //music to be played during game
         String musicFile = "spaceMusic.mp3";
@@ -56,8 +56,9 @@ public class Main extends Application {
         KeyListen keyListener = new KeyListen(scene);
 
         ArrayList<Spaceship> ships = new ArrayList<Spaceship>();
+        ArrayList<Projectile> projectiles = new ArrayList<>();
 
-        int midScreen = (int) ((width)/2);
+        int midScreen = (int) ((width) / 2);
 
         ShipFactory factory = new ShipFactory(graphicsContext, keyListener);
 
@@ -70,18 +71,15 @@ public class Main extends Application {
         enemyShip.setY(100);
 
 
-
-
         ships.add(userShip);
         ships.add(enemyShip);
 
 
-
-        new AnimationTimer(){
-            public void handle(long currentNanoTime){
+        new AnimationTimer() {
+            public void handle(long currentNanoTime) {
                 keyListener.listen();
                 updateShips(graphicsContext, keyListener, ships);    //Move ships and/or have the ships shoot
-                graphicsContext.clearRect(0,0, width, height);  //Wipe Screen of all ships
+                graphicsContext.clearRect(0, 0, width, height);  //Wipe Screen of all ships
                 drawShips(graphicsContext, ships);                   //Draw updated ships
             }
         }.start();
@@ -92,24 +90,33 @@ public class Main extends Application {
     }
 
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         launch(args);
     }
 
-    public void updateShips(GraphicsContext gc, KeyListen keyListener, ArrayList<Spaceship> ships){
+    public void updateShips(GraphicsContext gc, KeyListen keyListener, ArrayList<Spaceship> ships) {
 
-        for(Spaceship s: ships)
-        {
+        for (Spaceship s : ships) {
             s.tryToMove();
             s.tryToShoot();
         }
     }
 
-    public void drawShips(GraphicsContext gc, ArrayList<Spaceship> ships)
-    {
-        for(Spaceship s: ships)
-        {
+    public void drawShips(GraphicsContext gc, ArrayList<Spaceship> ships) {
+        for (Spaceship s : ships) {
             s.drawShip();
+        }
+    }
+
+    public void updateProjectiles(GraphicsContext gc, ArrayList<Projectile> projectiles) {
+        for (Projectile p : projectiles) {
+            p.tryToMove();
+        }
+    }
+
+    public void drawProjectiles(GraphicsContext gc, ArrayList<Projectile> projectiles) {
+        for (Projectile p : projectiles) {
+            gc.drawImage(p.getImageView().getImage(), p.getX(), p.getY(), p.getWidth(), p.getHeight());
         }
     }
 }

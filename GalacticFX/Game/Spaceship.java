@@ -3,6 +3,8 @@ package Game;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.ImageView;
 
+import java.util.ArrayList;
+
 
 public class Spaceship {
 
@@ -12,7 +14,9 @@ public class Spaceship {
     private KeyListen keyListener;
     private String shipType;
     private ImageView shipImage;
+    private Coordinate2D position;
     private double w, h;
+    private ArrayList<Projectile> projectiles;
 
     public Spaceship(ImageView imageView, String shipType, GraphicsContext graphicsContext, KeyListen keyListen)
     {
@@ -27,7 +31,7 @@ public class Spaceship {
 
         moveBehavior = new MoveBehavior();
         shootBehavior = new ShootBehavior();
-
+        projectiles = new ArrayList<>();
     }
 
     public void tryToMove(){
@@ -36,12 +40,10 @@ public class Spaceship {
     }
 
     public void tryToShoot() {
-
-        shootBehavior.update(gc, keyListener);
+        shootBehavior.update(position, keyListener, projectiles);
     }
 
     public void drawShip() {
-
         gc.drawImage(shipImage.getImage(), this.getX(), this.getY(), w, h);
     }
 
