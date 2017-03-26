@@ -1,27 +1,26 @@
 package Game;
 
-import javafx.scene.image.Image;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.ImageView;
-import javafx.scene.Scene;
-import javafx.scene.layout.StackPane;
-import java.util.Stack;
 
 
 public class Spaceship {
 
-    public MoveBehavior moveBehavior;
+    private MoveBehavior moveBehavior;
     private ShootBehavior shootBehavior;
+    private GraphicsContext gc;
+    private KeyListen keyListener;
     private String shipType;
     private ImageView shipImage;
-    //private int x, y;
-    private double w, h;    //DEON: width and height should be doubles
-    //private boolean isAlive; //this can be changed when collision occurs then spaceship can be deleted from list
+    private double w, h;
 
-    public Spaceship(ImageView imageView, String shipType)
+    public Spaceship(ImageView imageView, String shipType, GraphicsContext graphicsContext, KeyListen keyListen)
     {
         shipImage = imageView;
         this.shipType = shipType;
+
+        gc = graphicsContext;
+        keyListener = keyListen;
 
         w = imageView.boundsInParentProperty().getValue().getWidth();   //DEON: get width and height this way instead of a parameter
         h = imageView.boundsInParentProperty().getValue().getHeight();
@@ -31,17 +30,21 @@ public class Spaceship {
 
     }
 
-    public void tryToMove(GraphicsContext gc,KeyListen keyListener){
+    public void tryToMove(){
+
         moveBehavior.update(shipType, gc, keyListener);
     }
 
-    public void tryToShoot(GraphicsContext gc, KeyListen keyListener) {
+    public void tryToShoot() {
+
         shootBehavior.update(gc, keyListener);
     }
 
-    public void drawShip(GraphicsContext gc) {
+    public void drawShip() {
+
         gc.drawImage(shipImage.getImage(), this.getX(), this.getY(), w, h);
     }
+
 
     public ImageView getImageView() {
         return shipImage;

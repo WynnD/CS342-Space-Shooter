@@ -1,23 +1,19 @@
 package Game;
 
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
-import javafx.scene.input.KeyCode;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.animation.AnimationTimer;
-
-import java.awt.event.KeyListener;
-import java.util.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.stage.Stage;
+
 import java.io.File;
+import java.util.*;
 
 //TODO: weapons/shooting, main menu(stackpanel/vbox?), moveBehavior, timer(animationTimer?), bound/collision checking,
 //TODO: upgrades(in weaponClass?), levels, scoring, save/pause, sound effects
@@ -63,13 +59,14 @@ public class Main extends Application {
 
         int midScreen = (int) ((width)/2);
 
-        ShipFactory factory = new ShipFactory();
-        Spaceship userShip = factory.makeShip("User", graphicsContext, keyListener);
+        ShipFactory factory = new ShipFactory(graphicsContext, keyListener);
+
+        Spaceship userShip = factory.makeShip("User");
         userShip.setX(midScreen);
         userShip.setY(300);
         Image enemyImage = new Image("https://s-media-cache-ak0.pinimg.com/originals/68/0c/d4/680cd456acb325c4918cbe672a839522.png");
         ImageView enemyImageView = new ImageView(enemyImage);
-        //Spaceship enemyShip = new Spaceship(enemyImageView, midScreen, 20, 60, 60);
+
 
         ships.add(userShip);
         //ships.add(enemyShip);
@@ -78,6 +75,7 @@ public class Main extends Application {
 
         new AnimationTimer(){
             public void handle(long currentNanoTime){
+                keyListener.listen();
                 updateShips(graphicsContext, keyListener, ships);    //Move ships and/or have the ships shoot
                 graphicsContext.clearRect(0,0, width, height);  //Wipe Screen of all ships
                 drawShips(graphicsContext, ships);                   //Draw updated ships
@@ -98,8 +96,8 @@ public class Main extends Application {
 
         for(Spaceship s: ships)
         {
-            s.tryToMove(gc,keyListener);
-            s.tryToShoot(gc,keyListener);
+            s.tryToMove();
+            s.tryToShoot();
         }
     }
 
@@ -107,7 +105,7 @@ public class Main extends Application {
     {
         for(Spaceship s: ships)
         {
-            s.drawShip(gc);
+            s.drawShip();
         }
     }
 }

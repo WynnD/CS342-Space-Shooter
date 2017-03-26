@@ -1,9 +1,6 @@
 package Game;
 
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.Scene;
-import javafx.scene.input.KeyCode;
-import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
