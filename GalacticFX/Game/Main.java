@@ -64,12 +64,16 @@ public class Main extends Application {
         Spaceship userShip = factory.makeShip("User");
         userShip.setX(midScreen);
         userShip.setY(300);
-        Image enemyImage = new Image("https://s-media-cache-ak0.pinimg.com/originals/68/0c/d4/680cd456acb325c4918cbe672a839522.png");
-        ImageView enemyImageView = new ImageView(enemyImage);
+
+        Spaceship enemyShip = factory.makeShip("Enemy");
+        enemyShip.setX(midScreen);
+        enemyShip.setY(100);
+
+
 
 
         ships.add(userShip);
-        //ships.add(enemyShip);
+        ships.add(enemyShip);
 
 
 

@@ -18,7 +18,9 @@ public class MoveBehavior {
             if(shipType.equals("User")){
                 userMoveBehavior(gc, keyListener);
             }
-
+            else if(shipType.equals("Enemy")){
+                enemyMoveBehavior(gc, keyListener);
+            }
     }
 
     public void userMoveBehavior(GraphicsContext gc, KeyListen keyListener){
@@ -35,6 +37,11 @@ public class MoveBehavior {
             if (keyListener.getUpKeyPressed()) {
                 y-=5;
             }
+
+    }
+
+    public void enemyMoveBehavior(GraphicsContext gc, KeyListen keyListener){
+
 
     }
 
