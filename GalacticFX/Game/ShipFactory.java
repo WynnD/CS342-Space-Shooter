@@ -17,13 +17,22 @@ public class ShipFactory {
         this.keyListener = keyListener;
     }
 
-    public Spaceship makeShip(String shipType){
+    public Spaceship makeShip(String shipType) {
 
-        if(shipType.equals("User")){
+        if (shipType.equals("User")) {
             Image userImage = new Image("http://opengameart.org/sites/default/files/ship_0.png");
             ImageView userImageView = new ImageView(userImage);
             Spaceship userShip = new Spaceship(userImageView, shipType, gc, keyListener);
             return userShip;
+        } else if (shipType.equals("Enemy")) {
+            Image enemyImage = new Image("https://s-media-cache-ak0.pinimg.com/originals/68/0c/d4/680cd456acb325c4918cbe672a839522.png");
+            ImageView enemyImageView = new ImageView(enemyImage);
+            enemyImageView.setFitHeight(60);
+            enemyImageView.setFitWidth(60);
+
+            Spaceship enemyShip = new Spaceship(enemyImageView, shipType, gc, keyListener);
+            return enemyShip;
+
         }
 
         //else if() for other shipTypes "Lvl 1 Enemy", "Lvl 2 Enemy", etc.
