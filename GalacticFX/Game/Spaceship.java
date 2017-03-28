@@ -12,6 +12,24 @@ public class Spaceship {
     private KeyListen keyListener;
     private String shipType;
     private ImageView shipImage;
+    private Boolean canMove;
+
+    public double getW() {
+        return w;
+    }
+
+    public void setW(double w) {
+        this.w = w;
+    }
+
+    public double getH() {
+        return h;
+    }
+
+    public void setH(double h) {
+        this.h = h;
+    }
+
     private double w, h;
 
     public Spaceship(ImageView imageView, String shipType, GraphicsContext graphicsContext, KeyListen keyListen)
@@ -28,9 +46,12 @@ public class Spaceship {
         moveBehavior = new MoveBehavior();
         shootBehavior = new ShootBehavior();
 
+        this.canMove = true;
     }
 
+
     public void tryToMove(){
+
 
         moveBehavior.update(shipType, gc, keyListener);
     }
@@ -44,7 +65,6 @@ public class Spaceship {
 
         gc.drawImage(shipImage.getImage(), this.getX(), this.getY(), w, h);
     }
-
 
     public ImageView getImageView() {
         return shipImage;

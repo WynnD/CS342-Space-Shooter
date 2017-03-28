@@ -11,6 +11,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
+import javafx.geometry.BoundingBox;
 
 import java.io.File;
 import java.util.*;
@@ -75,12 +76,15 @@ public class Main extends Application {
         ships.add(userShip);
         ships.add(enemyShip);
 
+        BoundingBox window = new BoundingBox(0, 0, width, height);
+        CollisionHandler ch = new CollisionHandler(ships);
+
 
 
         new AnimationTimer(){
             public void handle(long currentNanoTime){
                 keyListener.listen();
-                updateShips(graphicsContext, keyListener, ships);    //Move ships and/or have the ships shoot
+                updateShips(graphicsContext, keyListener, ships, ch, window);    //Move ships and/or have the ships shoot
                 graphicsContext.clearRect(0,0, width, height);  //Wipe Screen of all ships
                 drawShips(graphicsContext, ships);                   //Draw updated ships
             }
@@ -96,11 +100,17 @@ public class Main extends Application {
         launch(args);
     }
 
-    public void updateShips(GraphicsContext gc, KeyListen keyListener, ArrayList<Spaceship> ships){
+    public void updateShips(GraphicsContext gc, KeyListen keyListener, ArrayList<Spaceship> ships, CollisionHandler ch, BoundingBox window){
 
         for(Spaceship s: ships)
         {
-            s.tryToMove();
+
+            //get next position
+            
+            if (window.contains(s.getX() , s.getY()))
+            {
+                s.tryToMove();
+            }
             s.tryToShoot();
         }
     }
@@ -109,7 +119,8 @@ public class Main extends Application {
     {
         for(Spaceship s: ships)
         {
-            s.drawShip();
+            gc.drawImage(s.getImageView().getImage(), s.getX(), s.getY(), s.getW(), s.getH());
+           // s.drawShip();
         }
     }
 }
