@@ -29,14 +29,14 @@ public class Spaceship {
         w = imageView.boundsInParentProperty().getValue().getWidth();   //DEON: get width and height this way instead of a parameter
         h = imageView.boundsInParentProperty().getValue().getHeight();
 
-        moveBehavior = new MoveBehavior();
+        moveBehavior = new MoveBehavior(this);
         shootBehavior = new ShootBehavior();
         projectiles = new ArrayList<>();
+        this.position = new Coordinate2D(0,0);
     }
 
     public void tryToMove(){
-
-        moveBehavior.update(shipType, gc, keyListener);
+        moveBehavior.update(keyListener);
     }
 
     public void tryToShoot() {
@@ -47,18 +47,26 @@ public class Spaceship {
         gc.drawImage(shipImage.getImage(), this.getX(), this.getY(), w, h);
     }
 
-
     public ImageView getImageView() {
         return shipImage;
     }
 
-    public int getX() { return moveBehavior.getX(); }
+    public int getX() { return position.getX(); }
 
-    public int getY() { return moveBehavior.getY(); }
+    public int getY() { return position.getY(); }
 
-    public void setX(int x) { moveBehavior.setX(x); }
+    public void setX(int x) { position.setX(x); }
 
-    public void setY(int y) { moveBehavior.setY(y); }
+    public void setY(int y) { position.setY(y); }
 
-    public String getShipType(){ return shipType;}
+    public void translateX(int offset) {
+        position.setX(position.getX()+offset);
+    }
+
+    public void translateY(int offset) {
+        position.setY(position.getY()+offset);
+    }
+
+
+    public String getShipType(){ return shipType; }
 }

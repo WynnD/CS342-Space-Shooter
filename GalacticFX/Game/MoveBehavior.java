@@ -12,44 +12,39 @@ import javafx.scene.layout.StackPane;
  */
 public class MoveBehavior {
 
-    private int x,y;
+    private Spaceship ship;
 
-    public void update(String shipType, GraphicsContext gc, KeyListen keyListener){
-            if(shipType.equals("User")){
-                userMoveBehavior(gc, keyListener);
+    public MoveBehavior (Spaceship ship) {
+        this.ship = ship;
+    }
+
+    public void update(KeyListen keyListener){
+            if(ship.getShipType().equals("User")){
+                userMoveBehavior(keyListener);
             }
-            else if(shipType.equals("Enemy")){
-                enemyMoveBehavior(gc, keyListener);
+            else if(ship.getShipType().equals("Enemy")){
+                enemyMoveBehavior(keyListener);
             }
     }
 
-    public void userMoveBehavior(GraphicsContext gc, KeyListen keyListener){
+    public void userMoveBehavior(KeyListen keyListener){
 
             if (keyListener.getRightKeyPressed()) {
-                x+=5;
+                ship.translateX(5);
             }
             if (keyListener.getLeftKeyPressed()){
-                x-=5;
+                ship.translateX(-5);
             }
             if (keyListener.getDownKeyPressed()){
-                y+=5;
+                ship.translateY(5);
             }
             if (keyListener.getUpKeyPressed()) {
-                y-=5;
+                ship.translateY(-5);
             }
 
     }
 
-    public void enemyMoveBehavior(GraphicsContext gc, KeyListen keyListener){
-
+    public void enemyMoveBehavior(KeyListen keyListener){
 
     }
-
-    public void setX(int newX){ x = newX; }
-
-    public void setY(int newY){ y = newY; }
-
-    public int getX(){ return x; }
-
-    public int getY(){ return y; }
 }
