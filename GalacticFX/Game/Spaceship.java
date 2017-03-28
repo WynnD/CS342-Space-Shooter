@@ -50,10 +50,10 @@ public class Spaceship {
     }
 
 
-    public void tryToMove(){
+    public Coordinate2D tryToMove(){
 
-
-        moveBehavior.update(shipType, gc, keyListener);
+        Coordinate2D newPosition = moveBehavior.update(shipType, gc, keyListener);
+        return newPosition;
     }
 
     public void tryToShoot() {

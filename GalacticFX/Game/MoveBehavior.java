@@ -14,29 +14,36 @@ public class MoveBehavior {
 
     private int x,y;
 
-    public void update(String shipType, GraphicsContext gc, KeyListen keyListener){
+    public Coordinate2D update(String shipType, GraphicsContext gc, KeyListen keyListener){
+            Coordinate2D newPos = new Coordinate2D(x, y);
+
             if(shipType.equals("User")){
-                userMoveBehavior(gc, keyListener);
+              newPos = userMoveBehavior(gc, keyListener);
             }
             else if(shipType.equals("Enemy")){
-                enemyMoveBehavior(gc, keyListener);
+               enemyMoveBehavior(gc, keyListener);
             }
+
+            return newPos;
     }
 
-    public void userMoveBehavior(GraphicsContext gc, KeyListen keyListener){
+    public Coordinate2D userMoveBehavior(GraphicsContext gc, KeyListen keyListener){
 
+            Coordinate2D newPosition = new Coordinate2D(x, y);
             if (keyListener.getRightKeyPressed()) {
-                x+=5;
+                newPosition.setX(newPosition.getX() + 5);
             }
             if (keyListener.getLeftKeyPressed()){
-                x-=5;
+                newPosition.setX(newPosition.getX() - 5);
             }
             if (keyListener.getDownKeyPressed()){
-                y+=5;
+                newPosition.setY(newPosition.getY() + 5);
             }
             if (keyListener.getUpKeyPressed()) {
-                y-=5;
+                newPosition.setY(newPosition.getY() - 5);
             }
+
+            return newPosition;
 
     }
 

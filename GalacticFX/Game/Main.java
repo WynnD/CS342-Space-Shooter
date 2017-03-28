@@ -105,12 +105,14 @@ public class Main extends Application {
         for(Spaceship s: ships)
         {
 
-            //get next position
+            Coordinate2D newPosition = s.tryToMove();
             
-            if (window.contains(s.getX() , s.getY()))
+            if (window.contains(newPosition.getX(), newPosition.getY()))
             {
-                s.tryToMove();
+                s.setX(newPosition.getX());
+                s.setY(newPosition.getY());
             }
+
             s.tryToShoot();
         }
     }
