@@ -23,6 +23,8 @@ import java.util.*;
 
 public class Main extends Application {
 
+    private GraphicsContext graphicsContext;
+
     @Override
     public void start(Stage primaryStage) {
 
@@ -42,7 +44,7 @@ public class Main extends Application {
 
         //create canvas with size of background image
         Canvas canvas = new Canvas(width, height);
-        GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
+        graphicsContext = canvas.getGraphicsContext2D();
         //create stackpane for background image and canvas
         StackPane sp = new StackPane();
         sp.getChildren().addAll(imgView, canvas);
@@ -78,9 +80,10 @@ public class Main extends Application {
         new AnimationTimer() {
             public void handle(long currentNanoTime) {
                 keyListener.listen();
-                updateShips(graphicsContext, keyListener, ships);    //Move ships and/or have the ships shoot
+                updateShips(keyListener, ships);    //Move ships and/or have the ships shoot
                 graphicsContext.clearRect(0, 0, width, height);  //Wipe Screen of all ships
-                drawShips(graphicsContext, ships);                   //Draw updated ships
+                drawShips(ships);                   //Draw updated ships
+                drawProjectiles(projectiles);
             }
         }.start();
 
@@ -94,7 +97,7 @@ public class Main extends Application {
         launch(args);
     }
 
-    public void updateShips(GraphicsContext gc, KeyListen keyListener, ArrayList<Spaceship> ships) {
+    public void updateShips(KeyListen keyListener, ArrayList<Spaceship> ships) {
 
         for (Spaceship s : ships) {
             s.tryToMove();
@@ -102,21 +105,21 @@ public class Main extends Application {
         }
     }
 
-    public void drawShips(GraphicsContext gc, ArrayList<Spaceship> ships) {
+    public void drawShips(ArrayList<Spaceship> ships) {
         for (Spaceship s : ships) {
             s.drawShip();
         }
     }
 
-    public void updateProjectiles(GraphicsContext gc, ArrayList<Projectile> projectiles) {
+    public void updateProjectiles(ArrayList<Projectile> projectiles) {
         for (Projectile p : projectiles) {
             p.tryToMove();
         }
     }
 
-    public void drawProjectiles(GraphicsContext gc, ArrayList<Projectile> projectiles) {
+    public void drawProjectiles(ArrayList<Projectile> projectiles) {
         for (Projectile p : projectiles) {
-            gc.drawImage(p.getImageView().getImage(), p.getX(), p.getY(), p.getWidth(), p.getHeight());
+            graphicsContext.drawImage(p.getImageView().getImage(), p.getX(), p.getY(), p.getWidth(), p.getHeight());
         }
     }
 }
