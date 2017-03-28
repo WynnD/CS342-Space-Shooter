@@ -15,6 +15,25 @@ public class Spaceship {
     private String shipType;
     private ImageView shipImage;
     private Coordinate2D position;
+
+    private Boolean canMove;
+
+    public double getW() {
+        return w;
+    }
+
+    public void setW(double w) {
+        this.w = w;
+    }
+
+    public double getH() {
+        return h;
+    }
+
+    public void setH(double h) {
+        this.h = h;
+    }
+
     private double w, h;
     private ArrayList<Projectile> projectiles;
 
@@ -33,10 +52,14 @@ public class Spaceship {
         shootBehavior = new ShootBehavior();
         projectiles = new ArrayList<>();
         this.position = new Coordinate2D(0,0);
+        this.canMove = true;
     }
 
-    public void tryToMove(){
-        moveBehavior.update(keyListener);
+
+    public Coordinate2D tryToMove(){
+
+        Coordinate2D newPosition = moveBehavior.update(keyListener);
+        return newPosition;
     }
 
     public void tryToShoot() {
@@ -60,13 +83,12 @@ public class Spaceship {
     public void setY(int y) { position.setY(y); }
 
     public void translateX(int offset) {
-        position.setX(position.getX()+offset);
+        position.translateX(offset);
     }
 
     public void translateY(int offset) {
-        position.setY(position.getY()+offset);
+        position.translateY(offset);
     }
-
 
     public String getShipType(){ return shipType; }
 }

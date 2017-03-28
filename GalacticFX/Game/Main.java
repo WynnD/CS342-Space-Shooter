@@ -11,6 +11,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
+import javafx.geometry.BoundingBox;
 
 import java.io.File;
 import java.util.*;
@@ -76,11 +77,14 @@ public class Main extends Application {
         ships.add(userShip);
         ships.add(enemyShip);
 
+        BoundingBox window = new BoundingBox(0, 0, width, height);
+        CollisionHandler ch = new CollisionHandler(ships);
+
 
         new AnimationTimer() {
             public void handle(long currentNanoTime) {
                 keyListener.listen();
-                updateShips(keyListener, ships);    //Move ships and/or have the ships shoot
+                updateShips(ships, ch, window);    //Move ships and/or have the ships shoot
                 graphicsContext.clearRect(0, 0, width, height);  //Wipe Screen of all ships
                 drawShips(ships);                   //Draw updated ships
                 drawProjectiles(projectiles);
@@ -97,17 +101,29 @@ public class Main extends Application {
         launch(args);
     }
 
-    public void updateShips(KeyListen keyListener, ArrayList<Spaceship> ships) {
+    public void updateShips(ArrayList<Spaceship> ships, CollisionHandler ch, BoundingBox window){
 
-        for (Spaceship s : ships) {
-            s.tryToMove();
+        for(Spaceship s: ships)
+        {
+
+            Coordinate2D newPosition = s.tryToMove();
+            
+            if (window.contains(newPosition.getX(), newPosition.getY()))
+            {
+                s.setX(newPosition.getX());
+                s.setY(newPosition.getY());
+            }
+
             s.tryToShoot();
         }
     }
 
-    public void drawShips(ArrayList<Spaceship> ships) {
-        for (Spaceship s : ships) {
-            s.drawShip();
+    public void drawShips(ArrayList<Spaceship> ships)
+    {
+        for(Spaceship s: ships)
+        {
+            graphicsContext.drawImage(s.getImageView().getImage(), s.getX(), s.getY(), s.getW(), s.getH());
+           // s.drawShip();
         }
     }
 

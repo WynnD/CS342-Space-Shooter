@@ -18,29 +18,35 @@ public class MoveBehavior {
         this.ship = ship;
     }
 
-    public void update(KeyListen keyListener){
+    public Coordinate2D update(KeyListen keyListener){
+            Coordinate2D newPos = new Coordinate2D(ship.getX(), ship.getY());
+
             if(ship.getShipType().equals("User")){
-                userMoveBehavior(keyListener);
+              newPos = userMoveBehavior(keyListener);
             }
             else if(ship.getShipType().equals("Enemy")){
-                enemyMoveBehavior(keyListener);
+               enemyMoveBehavior(keyListener);
             }
+
+            return newPos;
     }
 
-    public void userMoveBehavior(KeyListen keyListener){
-
+    public Coordinate2D userMoveBehavior(KeyListen keyListener){
+            Coordinate2D newPosition = new Coordinate2D(ship.getX(), ship.getY());
             if (keyListener.getRightKeyPressed()) {
-                ship.translateX(5);
+                newPosition.translateX(5);
             }
             if (keyListener.getLeftKeyPressed()){
-                ship.translateX(-5);
+                newPosition.translateX(-5);
             }
             if (keyListener.getDownKeyPressed()){
-                ship.translateY(5);
+                newPosition.translateY(5);
             }
             if (keyListener.getUpKeyPressed()) {
-                ship.translateY(-5);
+                newPosition.translateY(-5);
             }
+
+            return newPosition;
 
     }
 
