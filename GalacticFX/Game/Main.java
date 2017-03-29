@@ -102,13 +102,16 @@ public class Main extends Application {
     }
 
     public void updateShips(ArrayList<Spaceship> ships, CollisionHandler ch, BoundingBox window){
-
+        BoundingBox windowWithShipAdjustment;
         for(Spaceship s: ships)
         {
 
             Coordinate2D newPosition = s.tryToMove();
-            
-            if (window.contains(newPosition.getX(), newPosition.getY()))
+
+            // get bounding box with adjustment for ship size
+            windowWithShipAdjustment = new BoundingBox(0,0,window.getMaxX()-s.getW(), window.getMaxY()-s.getH());
+
+            if (windowWithShipAdjustment.contains(newPosition.getX(), newPosition.getY()))
             {
                 s.setX(newPosition.getX());
                 s.setY(newPosition.getY());
