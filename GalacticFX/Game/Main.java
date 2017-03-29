@@ -84,10 +84,11 @@ public class Main extends Application {
         new AnimationTimer() {
             public void handle(long currentNanoTime) {
                 keyListener.listen();
-                updateShips(ships, ch, window);    //Move ships and/or have the ships shoot
+                updateShips(ships, window);    //Move ships and/or have the ships shoot
+                updateProjectiles(ships, window);
                 graphicsContext.clearRect(0, 0, width, height);  //Wipe Screen of all ships
                 drawShips(ships);                   //Draw updated ships
-                drawProjectiles(projectiles);
+                drawProjectiles(ships);
             }
         }.start();
 
@@ -101,7 +102,7 @@ public class Main extends Application {
         launch(args);
     }
 
-    public void updateShips(ArrayList<Spaceship> ships, CollisionHandler ch, BoundingBox window){
+    public void updateShips(ArrayList<Spaceship> ships, BoundingBox window){
         BoundingBox windowWithShipAdjustment;
         for(Spaceship s: ships)
         {
@@ -130,15 +131,24 @@ public class Main extends Application {
         }
     }
 
-    public void updateProjectiles(ArrayList<Projectile> projectiles) {
-        for (Projectile p : projectiles) {
-            p.tryToMove();
+    public void updateProjectiles(ArrayList<Spaceship> ships, BoundingBox window) {
+        for (Spaceship s : ships) {
+            for (Projectile p : s.getProjectiles()) {
+                if (!window.contains(p.getX(), p.getY()))
+                {
+                    // destroy self
+                } else {
+                    p.tryToMove();
+                }
+            }
         }
     }
 
-    public void drawProjectiles(ArrayList<Projectile> projectiles) {
-        for (Projectile p : projectiles) {
-            graphicsContext.drawImage(p.getImageView().getImage(), p.getX(), p.getY(), p.getWidth(), p.getHeight());
-        }
+    public void drawProjectiles(ArrayList<Spaceship> ships) {
+        for (Spaceship s : ships) {
+            for (Projectile p : s.getProjectiles()) {
+                graphicsContext.drawImage(p.getImageView().getImage(), p.getX(), p.getY(), p.getWidth(), p.getHeight());
+            }
+         }
     }
 }

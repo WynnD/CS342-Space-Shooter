@@ -7,6 +7,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
 import java.io.File;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -14,13 +15,22 @@ import java.util.ArrayList;
  */
 public class ShootBehavior {
 
-    boolean alreadyShot = false;
+    private boolean alreadyShot = false;
+    private Spaceship shipThatIsFiring;
+    private KeyListen keyListener;
+    private ArrayList<Projectile> projectiles;
 
-    public void update(Coordinate2D ship_coords, KeyListen keyListener, ArrayList<Projectile> projectiles){
+    public ShootBehavior(Spaceship shipThatIsFiring, KeyListen keyListener, ArrayList<Projectile> projectiles) {
+        this.shipThatIsFiring = shipThatIsFiring;
+        this.keyListener = keyListener;
+        this.projectiles = projectiles;
+    }
+
+    public void update(){
         if(keyListener.getSpaceBarPressed()) {
-            if(alreadyShot == false) {
+            if(alreadyShot == false && shipThatIsFiring.getShipType().equals("User")) {
                 String musicFile2 = "shooting.mp3";
-                String projectileImageName = "projectile.png";
+                String projectileImageName = "projectile_small.png";
                 Media sound2 = new Media(new File(musicFile2).toURI().toString());
                 MediaPlayer mediaPlayer2 = new MediaPlayer(sound2);
                 mediaPlayer2.play();
@@ -29,8 +39,9 @@ public class ShootBehavior {
                 //
                 Image projectileImage = new Image(new File(projectileImageName).toURI().toString());
                 ImageView projectileImageView = new ImageView(projectileImage);
-                projectiles.add(new Projectile(ship_coords, projectileImageView));
-
+                projectileImageView.setFitHeight(20);
+                projectileImageView.setFitWidth(20);
+                projectiles.add(new Projectile(shipThatIsFiring, projectileImageView));
                 alreadyShot = true;
             }
         }
