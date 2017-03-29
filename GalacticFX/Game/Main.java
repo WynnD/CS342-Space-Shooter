@@ -86,6 +86,7 @@ public class Main extends Application {
                 keyListener.listen();
                 updateShips(ships, window);    //Move ships and/or have the ships shoot
                 updateProjectiles(ships, window);
+                deleteFlaggedProjectiles(ships);
                 graphicsContext.clearRect(0, 0, width, height);  //Wipe Screen of all ships
                 drawShips(ships);                   //Draw updated ships
                 drawProjectiles(ships);
@@ -106,7 +107,6 @@ public class Main extends Application {
         BoundingBox windowWithShipAdjustment;
         for(Spaceship s: ships)
         {
-
             Coordinate2D newPosition = s.tryToMove();
 
             // get bounding box with adjustment for ship size
@@ -119,6 +119,17 @@ public class Main extends Application {
             }
 
             s.tryToShoot();
+        }
+    }
+
+    public void deleteFlaggedProjectiles(ArrayList<Spaceship> ships) {
+        for (Spaceship s : ships) {
+            ArrayList<Projectile> projectiles = s.getProjectiles();
+            for (int i = 0; i < projectiles.size(); ++i) {
+                if (projectiles.get(i).destroyed()) {
+                    projectiles.remove(i);
+                }
+            }
         }
     }
 
@@ -136,7 +147,7 @@ public class Main extends Application {
             for (Projectile p : s.getProjectiles()) {
                 if (!window.contains(p.getX(), p.getY()))
                 {
-                    // destroy self
+                    p.destroy();
                 } else {
                     p.tryToMove();
                 }

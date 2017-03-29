@@ -9,6 +9,7 @@ import javafx.scene.image.ImageView;
  */
 public class Projectile {
     private Spaceship shipFiredFrom;
+    private boolean destroyed;
     private int damageOnHit;
     private int verticalSpeed;
 //    private MoveBehavior moveBehavior;
@@ -25,6 +26,7 @@ public class Projectile {
         position = getStartPosition();
 //        moveBehavior = new MoveBehavior();
         verticalSpeed = 15;
+        destroyed = false;
     }
 
 
@@ -81,5 +83,13 @@ public class Projectile {
     private int getStartY() {
         int shipY = shipFiredFrom.getY();
         return shipY-height;
+    }
+
+    public void destroy() {
+        destroyed = true;
+    }
+
+    public boolean destroyed() {
+        return destroyed;
     }
 }
