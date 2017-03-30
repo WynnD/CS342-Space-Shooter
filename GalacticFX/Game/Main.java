@@ -58,7 +58,7 @@ public class Main extends Application {
         menu.setStyle("-fx-background-color: black;");
         menu.setPrefSize(width, height);
         startButton = new Button("START");
-        startButton.setStyle("-fx-font: 36 impact; -fx-base: #4286f4;");
+        startButton.setStyle("-fx-font: 36 impact; -fx-base: #0de818;");
         startButton.setOnAction(new EventHandler<ActionEvent>(){
             @Override
             public void handle(ActionEvent event) {
@@ -117,9 +117,7 @@ public class Main extends Application {
             }
         }.start();
 
-
         primaryStage.show();
-
     }
 
 
@@ -176,7 +174,7 @@ public class Main extends Application {
                 if (collisionWithShip != -1)
                 {
                     System.out.println("ship collision");
-                    //ships.remove(collisionWithShip);
+                    ships.remove(collisionWithShip);
                 }
             }
 

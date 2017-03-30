@@ -13,6 +13,9 @@ import javafx.scene.layout.StackPane;
 public class MoveBehavior {
 
     private Spaceship ship;
+    private boolean moveRight;
+    private boolean moveLeft = true;
+    private int position = 0;
 
     public MoveBehavior (Spaceship ship) {
         this.ship = ship;
@@ -25,7 +28,7 @@ public class MoveBehavior {
             newPos = userMoveBehavior(keyListener);
         }
         else if(ship.getShipType().equals("Enemy")){
-            enemyMoveBehavior(keyListener);
+            newPos = enemyMoveBehavior(keyListener);
         }
 
         return newPos;
@@ -50,8 +53,34 @@ public class MoveBehavior {
 
     }
 
-    public void enemyMoveBehavior(KeyListen keyListener) {
+    public Coordinate2D enemyMoveBehavior(KeyListen keyListener) {
+        Coordinate2D newPosition = new Coordinate2D(ship.getX(), ship.getY());
+        if(moveLeft){
+            System.out.println("moveleft");
+            if(position > -100) {
+                position -= 2;
+                newPosition.translateX(-2);
+            }
+            else{
+                moveRight = true;
+                moveLeft = false;
+            }
+        }
+        else if(moveRight){
+            System.out.println("moveright");
+            if(position < 100){
+                position+=2;
+                newPosition.translateX(2);
+            }
 
+            else{
+                moveLeft = true;
+                moveRight = false;
+            }
+
+        }
+
+        return newPosition;
     }
 
 }
