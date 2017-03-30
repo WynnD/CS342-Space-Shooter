@@ -3,6 +3,8 @@ package Game;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.ImageView;
 
+import java.util.ArrayList;
+
 
 public class Spaceship {
 
@@ -12,6 +14,8 @@ public class Spaceship {
     private KeyListen keyListener;
     private String shipType;
     private ImageView shipImage;
+    private Coordinate2D position;
+
     private Boolean canMove;
 
     public double getW() {
@@ -31,6 +35,7 @@ public class Spaceship {
     }
 
     private double w, h;
+    private ArrayList<Projectile> projectiles;
 
     public Spaceship(ImageView imageView, String shipType, GraphicsContext graphicsContext, KeyListen keyListen)
     {
@@ -43,26 +48,25 @@ public class Spaceship {
         w = imageView.boundsInParentProperty().getValue().getWidth();   //DEON: get width and height this way instead of a parameter
         h = imageView.boundsInParentProperty().getValue().getHeight();
 
-        moveBehavior = new MoveBehavior();
-        shootBehavior = new ShootBehavior();
-
+        projectiles = new ArrayList<>();
+        moveBehavior = new MoveBehavior(this);
+        shootBehavior = new ShootBehavior(this, keyListener, projectiles);
+        this.position = new Coordinate2D(0,0);
         this.canMove = true;
     }
 
 
     public Coordinate2D tryToMove(){
 
-        Coordinate2D newPosition = moveBehavior.update(shipType, gc, keyListener);
+        Coordinate2D newPosition = moveBehavior.update(keyListener);
         return newPosition;
     }
 
     public void tryToShoot() {
-
-        shootBehavior.update(gc, keyListener);
+        shootBehavior.update();
     }
 
     public void drawShip() {
-
         gc.drawImage(shipImage.getImage(), this.getX(), this.getY(), w, h);
     }
 
@@ -70,13 +74,25 @@ public class Spaceship {
         return shipImage;
     }
 
-    public int getX() { return moveBehavior.getX(); }
+    public int getX() { return position.getX(); }
 
-    public int getY() { return moveBehavior.getY(); }
+    public int getY() { return position.getY(); }
 
-    public void setX(int x) { moveBehavior.setX(x); }
+    public void setX(int x) { position.setX(x); }
 
-    public void setY(int y) { moveBehavior.setY(y); }
+    public void setY(int y) { position.setY(y); }
 
-    public String getShipType(){ return shipType;}
+    public void translateX(int offset) {
+        position.translateX(offset);
+    }
+
+    public void translateY(int offset) {
+        position.translateY(offset);
+    }
+
+    public String getShipType(){ return shipType; }
+
+    public ArrayList<Projectile> getProjectiles() {
+        return projectiles;
+    }
 }

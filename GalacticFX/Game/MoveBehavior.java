@@ -12,51 +12,46 @@ import javafx.scene.layout.StackPane;
  */
 public class MoveBehavior {
 
-    private int x,y;
+    private Spaceship ship;
 
-    public Coordinate2D update(String shipType, GraphicsContext gc, KeyListen keyListener){
-            Coordinate2D newPos = new Coordinate2D(x, y);
-
-            if(shipType.equals("User")){
-              newPos = userMoveBehavior(gc, keyListener);
-            }
-            else if(shipType.equals("Enemy")){
-               enemyMoveBehavior(gc, keyListener);
-            }
-
-            return newPos;
+    public MoveBehavior (Spaceship ship) {
+        this.ship = ship;
     }
 
-    public Coordinate2D userMoveBehavior(GraphicsContext gc, KeyListen keyListener){
+    public Coordinate2D update(KeyListen keyListener){
+        Coordinate2D newPos = new Coordinate2D(ship.getX(), ship.getY());
 
-            Coordinate2D newPosition = new Coordinate2D(x, y);
-            if (keyListener.getRightKeyPressed()) {
-                newPosition.setX(newPosition.getX() + 5);
-            }
-            if (keyListener.getLeftKeyPressed()){
-                newPosition.setX(newPosition.getX() - 5);
-            }
-            if (keyListener.getDownKeyPressed()){
-                newPosition.setY(newPosition.getY() + 5);
-            }
-            if (keyListener.getUpKeyPressed()) {
-                newPosition.setY(newPosition.getY() - 5);
-            }
+        if(ship.getShipType().equals("User")){
+            newPos = userMoveBehavior(keyListener);
+        }
+        else if(ship.getShipType().equals("Enemy")){
+            enemyMoveBehavior(keyListener);
+        }
 
-            return newPosition;
+        return newPos;
+    }
+
+    public Coordinate2D userMoveBehavior(KeyListen keyListener){
+        Coordinate2D newPosition = new Coordinate2D(ship.getX(), ship.getY());
+        if (keyListener.getRightKeyPressed()) {
+            newPosition.translateX(5);
+        }
+        if (keyListener.getLeftKeyPressed()){
+            newPosition.translateX(-5);
+        }
+        if (keyListener.getDownKeyPressed()){
+            newPosition.translateY(5);
+        }
+        if (keyListener.getUpKeyPressed()) {
+            newPosition.translateY(-5);
+        }
+
+        return newPosition;
 
     }
 
-    public void enemyMoveBehavior(GraphicsContext gc, KeyListen keyListener){
-
+    public void enemyMoveBehavior(KeyListen keyListener) {
 
     }
 
-    public void setX(int newX){ x = newX; }
-
-    public void setY(int newY){ y = newY; }
-
-    public int getX(){ return x; }
-
-    public int getY(){ return y; }
-}
+    }
