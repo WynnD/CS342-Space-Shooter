@@ -25,7 +25,7 @@ public class Projectile {
         height = (int) imageView.boundsInParentProperty().getValue().getHeight();
         position = getStartPosition();
 //        moveBehavior = new MoveBehavior();
-        verticalSpeed = 15;
+        verticalSpeed = 8;
         destroyed = false;
     }
 

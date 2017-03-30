@@ -15,6 +15,7 @@ import javafx.stage.Stage;
 import javafx.geometry.BoundingBox;
 import javafx.scene.layout.*;
 import javafx.event.*;
+import java.awt.*;
 import java.io.File;
 import java.util.*;
 
@@ -33,7 +34,7 @@ public class Main extends Application {
         BorderPane menu = new BorderPane();
 
         //music to be played during game
-        String musicFile1 = "FunTheme.mp3";
+        String musicFile1 = "spaceIntro.mp3";
         Media menuSound = new Media(new File(musicFile1).toURI().toString());
         MediaPlayer mediaPlayerMenu = new MediaPlayer(menuSound);
         mediaPlayerMenu.setCycleCount(MediaPlayer.INDEFINITE); //loops music
@@ -62,7 +63,7 @@ public class Main extends Application {
             public void handle(ActionEvent event) {
                 mediaPlayerMenu.pause();
                 theStage.setScene(scene);
-                String musicFile = "spaceMusic.mp3";
+                String musicFile = "Orbit.mp3";
                 Media sound = new Media(new File(musicFile).toURI().toString());
                 MediaPlayer mediaPlayer = new MediaPlayer(sound);
                 mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE); //loops music
@@ -97,17 +98,17 @@ public class Main extends Application {
         ships.add(enemyShip);
 
         BoundingBox window = new BoundingBox(0, 0, width, height);
-        CollisionHandler ch = new CollisionHandler(ships);
+        //CollisionHandler ch = new CollisionHandler(ships);
 
         new AnimationTimer(){
             public void handle(long currentNanoTime){
-                keyListener.listen();
-                updateShips(ships, window);    //Move ships and/or have the ships shoot
-                updateProjectiles(ships, window);
-                deleteFlaggedProjectiles(ships);
-                graphicsContext.clearRect(0, 0, width, height);  //Wipe Screen of all ships
-                drawShips(ships);                   //Draw updated ships
-                drawProjectiles(ships);
+                    keyListener.listen();
+                    updateShips(ships, window);    //Move ships and/or have the ships shoot
+                    updateProjectiles(ships, window);
+                    deleteFlaggedProjectiles(ships);
+                    graphicsContext.clearRect(0, 0, width, height);  //Wipe Screen of all ships
+                    drawShips(ships);                   //Draw updated ships
+                    drawProjectiles(ships);
             }
         }.start();
 
@@ -150,19 +151,51 @@ public class Main extends Application {
         }
     }
 
+    public int checkShipCollisions(int newX, int newY, ArrayList<Spaceship> ships)
+    {
+        int shipCollision = -1;
+        Spaceship curShip;
+
+        for(int i = 1; i < ships.size(); i++)
+        {
+            curShip = ships.get(i);
+            Rectangle rect = new Rectangle(); //basically a hitbox for the ship
+            rect.setBounds(curShip.getX(), curShip.getY(), (int)curShip.getW(), (int)curShip.getH());
+            if(rect.contains(newX, newY))
+            {
+                shipCollision = i;
+                return shipCollision;
+            }
+        }
+
+        return shipCollision;
+    }
+
     public void updateShips(ArrayList<Spaceship> ships, BoundingBox window){
 
         BoundingBox windowWithShipAdjustment;
+        int collisionWithShip = -1;
 
         for(Spaceship s: ships)
         {
 
             Coordinate2D newPosition = s.tryToMove();
 
+            if(s.getShipType().equals("User"))
+            {
+                //returns ship index if collision otherwise -1
+                collisionWithShip = checkShipCollisions(newPosition.getX(), newPosition.getY(), ships);
+                if (collisionWithShip != -1)
+                {
+                    System.out.println("ship collision");
+                    //ships.remove(collisionWithShip);
+                }
+            }
+
             // get bounding box with adjustment for ship size
             windowWithShipAdjustment = new BoundingBox(0,0,window.getMaxX()-s.getW(), window.getMaxY()-s.getH());
 
-            if (windowWithShipAdjustment.contains(newPosition.getX(), newPosition.getY()))
+            if (windowWithShipAdjustment.contains(newPosition.getX(), newPosition.getY()) && collisionWithShip == -1)
             {
                 s.setX(newPosition.getX());
                 s.setY(newPosition.getY());

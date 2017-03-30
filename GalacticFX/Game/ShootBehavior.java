@@ -37,7 +37,8 @@ public class ShootBehavior {
 
 
                 //
-                Image projectileImage = new Image(new File(projectileImageName).toURI().toString());
+                //Image projectileImage = new Image(new File(projectileImageName).toURI().toString());
+                Image projectileImage = new Image("http://www.newstatesman.com/sites/all/themes/creative-responsive-theme/images/cookie.png");
                 ImageView projectileImageView = new ImageView(projectileImage);
                 projectileImageView.setFitHeight(15);
                 projectileImageView.setFitWidth(15);
