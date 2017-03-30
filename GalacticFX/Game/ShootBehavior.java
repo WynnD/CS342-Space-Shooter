@@ -39,8 +39,8 @@ public class ShootBehavior {
                 //
                 Image projectileImage = new Image(new File(projectileImageName).toURI().toString());
                 ImageView projectileImageView = new ImageView(projectileImage);
-                projectileImageView.setFitHeight(20);
-                projectileImageView.setFitWidth(20);
+                projectileImageView.setFitHeight(10);
+                projectileImageView.setFitWidth(10);
                 projectiles.add(new Projectile(shipThatIsFiring, projectileImageView));
                 alreadyShot = true;
             }
