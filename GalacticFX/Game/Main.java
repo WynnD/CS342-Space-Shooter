@@ -41,6 +41,7 @@ public class Main extends Application {
         mediaPlayerMenu.play();
 
         //set background image
+
         Image background = new Image("http://orig10.deviantart.net/dda0/f/2014/285/2/f/free_for_use_galaxy_background_by_duskydeer-d82jaky.png");
         ImageView imgView = new ImageView(background);
         double width = background.getWidth();
@@ -81,6 +82,7 @@ public class Main extends Application {
         KeyListen keyListener = new KeyListen(scene);
 
         ArrayList<Spaceship> ships = new ArrayList<Spaceship>();
+        ArrayList<Projectile> projectiles = new ArrayList<>();
 
         int midScreen = (int) ((width)/2);
 
@@ -93,6 +95,9 @@ public class Main extends Application {
         Spaceship enemyShip = factory.makeShip("Enemy");
         enemyShip.setX(midScreen);
         enemyShip.setY(100);
+
+
+
 
         ships.add(userShip);
         ships.add(enemyShip);
@@ -112,8 +117,11 @@ public class Main extends Application {
             }
         }.start();
 
+
         primaryStage.show();
+
     }
+
 
     public static void main(String[] args){
         launch(args);
@@ -130,26 +138,6 @@ public class Main extends Application {
         }
     }
 
-    public void updateProjectiles(ArrayList<Spaceship> ships, BoundingBox window) {
-        for (Spaceship s : ships) {
-            for (Projectile p : s.getProjectiles()) {
-                if (!window.contains(p.getX(), p.getY()))
-                {
-                    p.destroy();
-                } else {
-                    p.tryToMove();
-                }
-            }
-        }
-    }
-
-    public void drawProjectiles(ArrayList<Spaceship> ships) {
-        for (Spaceship s : ships) {
-            for (Projectile p : s.getProjectiles()) {
-                graphicsContext.drawImage(p.getImageView().getImage(), p.getX(), p.getY(), p.getWidth(), p.getHeight());
-            }
-        }
-    }
 
     public int checkShipCollisions(int newX, int newY, ArrayList<Spaceship> ships)
     {
@@ -211,5 +199,26 @@ public class Main extends Application {
         {
            s.drawShip();
         }
+    }
+
+    public void updateProjectiles(ArrayList<Spaceship> ships, BoundingBox window) {
+        for (Spaceship s : ships) {
+            for (Projectile p : s.getProjectiles()) {
+                if (!window.contains(p.getX(), p.getY()))
+                {
+                    p.destroy();
+                } else {
+                    p.tryToMove();
+                }
+            }
+        }
+    }
+
+    public void drawProjectiles(ArrayList<Spaceship> ships) {
+        for (Spaceship s : ships) {
+            for (Projectile p : s.getProjectiles()) {
+                graphicsContext.drawImage(p.getImageView().getImage(), p.getX(), p.getY(), p.getWidth(), p.getHeight());
+            }
+         }
     }
 }

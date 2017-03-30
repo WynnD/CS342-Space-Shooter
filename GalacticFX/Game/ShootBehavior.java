@@ -37,11 +37,10 @@ public class ShootBehavior {
 
 
                 //
-                //Image projectileImage = new Image(new File(projectileImageName).toURI().toString());
-                Image projectileImage = new Image("http://www.newstatesman.com/sites/all/themes/creative-responsive-theme/images/cookie.png");
+                Image projectileImage = new Image(new File(projectileImageName).toURI().toString());
                 ImageView projectileImageView = new ImageView(projectileImage);
-                projectileImageView.setFitHeight(15);
-                projectileImageView.setFitWidth(15);
+                projectileImageView.setFitHeight(20);
+                projectileImageView.setFitWidth(20);
                 projectiles.add(new Projectile(shipThatIsFiring, projectileImageView));
                 alreadyShot = true;
             }

@@ -67,6 +67,7 @@ public class Spaceship {
     }
 
     public void drawShip() {
+
         gc.drawImage(shipImage.getImage(), this.getX(), this.getY(), w, h);
     }
 
