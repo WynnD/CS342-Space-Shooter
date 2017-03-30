@@ -33,11 +33,11 @@ public class Main extends Application {
         BorderPane menu = new BorderPane();
 
         //music to be played during game
-        String musicFile = "spaceMusic.mp3";
-        Media sound = new Media(new File(musicFile).toURI().toString());
-        MediaPlayer mediaPlayer = new MediaPlayer(sound);
-        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE); //loops music
-        mediaPlayer.play();
+        String musicFile1 = "FunTheme.mp3";
+        Media menuSound = new Media(new File(musicFile1).toURI().toString());
+        MediaPlayer mediaPlayerMenu = new MediaPlayer(menuSound);
+        mediaPlayerMenu.setCycleCount(MediaPlayer.INDEFINITE); //loops music
+        mediaPlayerMenu.play();
 
         //set background image
         Image background = new Image("http://orig10.deviantart.net/dda0/f/2014/285/2/f/free_for_use_galaxy_background_by_duskydeer-d82jaky.png");
@@ -60,7 +60,13 @@ public class Main extends Application {
         startButton.setOnAction(new EventHandler<ActionEvent>(){
             @Override
             public void handle(ActionEvent event) {
+                mediaPlayerMenu.pause();
                 theStage.setScene(scene);
+                String musicFile = "spaceMusic.mp3";
+                Media sound = new Media(new File(musicFile).toURI().toString());
+                MediaPlayer mediaPlayer = new MediaPlayer(sound);
+                mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE); //loops music
+                mediaPlayer.play();
             }
         });
 
