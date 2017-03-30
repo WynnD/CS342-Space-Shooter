@@ -20,35 +20,6 @@ public class KeyListen {
     public KeyListen(Scene scene){
 
             this.scene = scene;
-            scene.getRoot().requestFocus();
-            scene.setOnKeyPressed(e -> {
-                if (e.getCode() == KeyCode.RIGHT) {
-                    setRightKeyPressed(true);
-                } else if (e.getCode() == KeyCode.LEFT) {
-                    setLeftKeyPressed(true);
-                } else if (e.getCode() == KeyCode.UP) {
-                    setUpKeyPressed(true);
-                } else if (e.getCode() == KeyCode.DOWN) {
-                    setDownKeyPressed(true);
-                } else if (e.getCode() == KeyCode.SPACE) {
-                    setSpaceBarPressed(true);
-                }
-            });
-
-
-            scene.setOnKeyReleased(e -> {
-                if (e.getCode() == KeyCode.RIGHT) {
-                    setRightKeyPressed(false);
-                } else if (e.getCode() == KeyCode.LEFT) {
-                    setLeftKeyPressed(false);
-                } else if (e.getCode() == KeyCode.UP) {
-                    setUpKeyPressed(false);
-                } else if (e.getCode() == KeyCode.DOWN) {
-                    setDownKeyPressed(false);
-                } else if (e.getCode() == KeyCode.SPACE) {
-                    setSpaceBarPressed(false);
-                }
-            });
 
     }
 
