@@ -13,6 +13,7 @@ public class Spaceship {
     private String shipType;
     private ImageView shipImage;
     private double w, h;
+    private int health;
 
     public Spaceship(ImageView imageView, String shipType, GraphicsContext graphicsContext, KeyListen keyListen)
     {
@@ -57,6 +58,10 @@ public class Spaceship {
     public void setX(int x) { moveBehavior.setX(x); }
 
     public void setY(int y) { moveBehavior.setY(y); }
+
+    public int getHealth(){ return health;}
+
+    public void setHealth(int value){ health = value;}
 
     public String getShipType(){ return shipType;}
 }

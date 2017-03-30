@@ -12,14 +12,16 @@ import javafx.scene.layout.StackPane;
  */
 public class MoveBehavior {
 
-    private int x,y;
+    private int x,y,position = 0;
+    private boolean moveRight;
+    private boolean moveLeft = true;
 
     public void update(String shipType, GraphicsContext gc, KeyListen keyListener){
             if(shipType.equals("User")){
                 userMoveBehavior(gc, keyListener);
             }
             else if(shipType.equals("Enemy")){
-                enemyMoveBehavior(gc, keyListener);
+                enemyMoveBehavior(gc);
             }
     }
 
@@ -40,8 +42,34 @@ public class MoveBehavior {
 
     }
 
-    public void enemyMoveBehavior(GraphicsContext gc, KeyListen keyListener){
+    public void enemyMoveBehavior(GraphicsContext gc){
 
+
+        if(moveLeft){
+            System.out.println("moveleft");
+            if(position > -30) {
+               x -= 1;
+               position -= 1;
+           }
+
+           else{
+               moveRight = true;
+               moveLeft = false;
+           }
+        }
+        else if(moveRight){
+            System.out.println("moveright");
+            if(position < 30){
+                x+=1;
+                position+=1;
+            }
+
+            else{
+                moveLeft = true;
+                moveRight = false;
+            }
+
+        }
 
     }
 
