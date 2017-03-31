@@ -11,7 +11,6 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javafx.scene.text.*;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.geometry.BoundingBox;
@@ -23,13 +22,13 @@ import java.awt.*;
 import java.io.File;
 import java.util.*;
 
-//TODO: weapons/shooting, main menu, moveBehavior, collision checking,
-//TODO: upgrades, levels, scoring, save/pause, sound effects
+//TODO: upgrades, levels, scoring, save/pause, multiple enemies, explosion animation
 
 public class Main extends Application {
     private GraphicsContext graphicsContext;
     Button startButton;
     Scene scene;
+    private Scene endScene;
     Stage theStage;
     private int seconds;
     private long lastTime;
@@ -86,13 +85,11 @@ public class Main extends Application {
         endLabel.setTextFill(Color.RED);
         Font font = new Font("Arial", 60);
         endLabel.setFont(font);
-
         gameOver.setCenter(endLabel);
-
 
         scene = new Scene(sp);
         Scene menuScene = new Scene(menu);
-        Scene endScene = new Scene(gameOver);
+        endScene = new Scene(gameOver);
         primaryStage.setTitle("Galactic Overdrive 3000");
         primaryStage.setScene(menuScene);
 
@@ -114,8 +111,18 @@ public class Main extends Application {
         enemyShip.setX(midScreen);
         enemyShip.setY(100);
 
+        Spaceship enemyShip2 = factory.makeShip("Enemy");
+        enemyShip2.setX(midScreen - 100);
+        enemyShip2.setY(50);
+
+        Spaceship enemyShip3 = factory.makeShip("Enemy");
+        enemyShip3.setX(midScreen - 200);
+        enemyShip3.setY(100);
+
         ships.add(userShip);
         ships.add(enemyShip);
+        ships.add(enemyShip2);
+        ships.add(enemyShip3);
 
         BoundingBox window = new BoundingBox(0, 0, width, height);
         //CollisionHandler ch = new CollisionHandler(ships);
@@ -205,6 +212,8 @@ public class Main extends Application {
                 {
                     System.out.println("ship collision");
                     ships.remove(collisionWithShip);
+                    explosionSound();
+                    theStage.setScene(endScene);
                 }
             }
 
@@ -235,6 +244,7 @@ public class Main extends Application {
 
         int collisionWithShip = -1;
 
+        outerloop: //label used for going back to start of loop
         for (Spaceship s : ships) {
             for (Projectile p : s.getProjectiles()) {
                 if (!window.contains(p.getX(), p.getY()))
@@ -248,6 +258,7 @@ public class Main extends Application {
                         System.out.println("ship collision");
                         explosionSound();
                         ships.remove(collisionWithShip);
+                        break outerloop; //go to next ship if this ship had a collision
                     }
                     else
                     {
