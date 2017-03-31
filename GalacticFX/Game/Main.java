@@ -22,6 +22,7 @@ import java.awt.*;
 import java.io.File;
 import java.util.*;
 
+//TODO: add musicHandler class, migrate things to collisionHandler (cleanup main)
 //TODO: upgrades, levels, scoring, save/pause, multiple enemies, explosion animation
 
 public class Main extends Application {
@@ -101,36 +102,12 @@ public class Main extends Application {
         primaryStage.setTitle("Galactic Overdrive 3000");
         primaryStage.setScene(menuScene);
 
-
         KeyListen keyListener = new KeyListen(scene);
 
         ArrayList<Spaceship> ships = new ArrayList<Spaceship>();
-        ArrayList<Projectile> projectiles = new ArrayList<>();
-
-        int midScreen = (int) ((width)/2);
 
         ShipFactory factory = new ShipFactory(graphicsContext, keyListener);
-
-        Spaceship userShip = factory.makeShip("User");
-        userShip.setX(midScreen);
-        userShip.setY((int) (height-100));
-
-        Spaceship enemyShip = factory.makeShip("Enemy");
-        enemyShip.setX(midScreen);
-        enemyShip.setY(100);
-
-        Spaceship enemyShip2 = factory.makeShip("Enemy");
-        enemyShip2.setX(midScreen - 100);
-        enemyShip2.setY(50);
-
-        Spaceship enemyShip3 = factory.makeShip("Enemy");
-        enemyShip3.setX(midScreen - 200);
-        enemyShip3.setY(100);
-
-        ships.add(userShip);
-        ships.add(enemyShip);
-        ships.add(enemyShip2);
-        ships.add(enemyShip3);
+        initializeShips(factory, ships);
 
         BoundingBox window = new BoundingBox(0, 0, width, height);
         //CollisionHandler ch = new CollisionHandler(ships);
@@ -150,7 +127,6 @@ public class Main extends Application {
                         if(seconds%2 == 0)
                             createProjectiles(ships);
                     }
-
 
                         keyListener.listen();
                         updateShips(ships, window);    //Move ships and/or have the ships shoot
@@ -174,6 +150,35 @@ public class Main extends Application {
 
     public static void main(String[] args){
         launch(args);
+    }
+
+    public void initializeShips(ShipFactory factory, ArrayList<Spaceship> ships)
+    {
+        double width = graphicsContext.getCanvas().getWidth();
+        int midScreen = (int) ((width)/2);
+        double height = graphicsContext.getCanvas().getHeight();
+
+        Spaceship userShip = factory.makeShip("User");
+        //userShip.setPosition(midScreen, ((int)(height-100)) );
+        userShip.setX(midScreen);
+        userShip.setY((int) (height-100));
+
+        Spaceship enemyShip = factory.makeShip("Enemy");
+        enemyShip.setX(midScreen);
+        enemyShip.setY(100);
+
+        Spaceship enemyShip2 = factory.makeShip("Enemy");
+        enemyShip2.setX(midScreen - 100);
+        enemyShip2.setY(50);
+
+        Spaceship enemyShip3 = factory.makeShip("Enemy");
+        enemyShip3.setX(midScreen - 200);
+        enemyShip3.setY(100);
+
+        ships.add(userShip);
+        ships.add(enemyShip);
+        ships.add(enemyShip2);
+        ships.add(enemyShip3);
     }
 
     public void createProjectiles(ArrayList<Spaceship> ships)

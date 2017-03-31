@@ -74,6 +74,12 @@ public class Spaceship {
         return shipImage;
     }
 
+    public void setPosition(int x, int y)
+    {
+        position.setX(x);
+        position.setY(y);
+    }
+
     public int getX() { return position.getX(); }
 
     public int getY() { return position.getY(); }
