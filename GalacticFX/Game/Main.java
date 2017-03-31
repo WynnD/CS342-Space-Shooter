@@ -48,10 +48,17 @@ public class Main extends Application {
         mediaPlayerMenu.play();
 
         //set background image
-        Image background = new Image("http://orig10.deviantart.net/dda0/f/2014/285/2/f/free_for_use_galaxy_background_by_duskydeer-d82jaky.png");
+        String backgroundImageName = "stars.jpg";
+        Image background = new Image(new File(backgroundImageName).toURI().toString());
+        //Image background = new Image("http://orig10.deviantart.net/dda0/f/2014/285/2/f/free_for_use_galaxy_background_by_duskydeer-d82jaky.png");
         ImageView imgView = new ImageView(background);
-        double width = background.getWidth();
-        double height = background.getHeight();
+
+        imgView.setFitHeight(700);
+        imgView.setFitWidth(550);
+        double width = imgView.getFitWidth();
+        double height = imgView.getFitHeight();
+        //double width = background.getWidth();
+        //double height = background.getHeight();
 
         //create canvas with size of background image
         Canvas canvas = new Canvas(width, height);
