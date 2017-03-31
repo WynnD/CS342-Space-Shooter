@@ -30,13 +30,13 @@ public class ShootBehavior {
         if(keyListener.getSpaceBarPressed()) {
             if(alreadyShot == false && shipThatIsFiring.getShipType().equals("User")) {
                 String musicFile2 = "shooting.mp3";
-                String projectileImageName = "projectile_small.png";
                 Media sound2 = new Media(new File(musicFile2).toURI().toString());
                 MediaPlayer mediaPlayer2 = new MediaPlayer(sound2);
                 mediaPlayer2.play();
 
 
                 //
+                String projectileImageName = "projectile_small.png";
                 Image projectileImage = new Image(new File(projectileImageName).toURI().toString());
                 ImageView projectileImageView = new ImageView(projectileImage);
                 projectileImageView.setFitHeight(10);

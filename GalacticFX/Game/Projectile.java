@@ -30,8 +30,11 @@ public class Projectile {
     }
 
 
-    public void tryToMove(){
-        position.translateY(-verticalSpeed);
+    public Coordinate2D tryToMove(){
+
+        Coordinate2D newPos = new Coordinate2D(position.getX(), position.getY()-verticalSpeed);
+        return newPos;
+        //position.translateY(-verticalSpeed);
     }
 
     public ImageView getImageView() {

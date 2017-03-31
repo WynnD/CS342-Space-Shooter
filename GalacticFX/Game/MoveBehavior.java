@@ -56,7 +56,7 @@ public class MoveBehavior {
     public Coordinate2D enemyMoveBehavior(KeyListen keyListener) {
         Coordinate2D newPosition = new Coordinate2D(ship.getX(), ship.getY());
         if(moveLeft){
-            System.out.println("moveleft");
+            //System.out.println("moveleft");
             if(position > -100) {
                 position -= 2;
                 newPosition.translateX(-2);
@@ -67,7 +67,7 @@ public class MoveBehavior {
             }
         }
         else if(moveRight){
-            System.out.println("moveright");
+            //System.out.println("moveright");
             if(position < 100){
                 position+=2;
                 newPosition.translateX(2);

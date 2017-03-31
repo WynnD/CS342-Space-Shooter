@@ -11,9 +11,13 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.text.*;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.geometry.BoundingBox;
 import javafx.scene.layout.*;
+import javafx.scene.control.Label;
+import javafx.scene.paint.Color;
 import javafx.event.*;
 import java.awt.*;
 import java.io.File;
@@ -27,11 +31,15 @@ public class Main extends Application {
     Button startButton;
     Scene scene;
     Stage theStage;
+    private int seconds;
+    private long lastTime;
 
     @Override
     public void start(Stage primaryStage){
+
         theStage = primaryStage;
         BorderPane menu = new BorderPane();
+        BorderPane gameOver = new BorderPane();
 
         //music to be played during game
         String musicFile1 = "spaceIntro.mp3";
@@ -41,7 +49,6 @@ public class Main extends Application {
         mediaPlayerMenu.play();
 
         //set background image
-
         Image background = new Image("http://orig10.deviantart.net/dda0/f/2014/285/2/f/free_for_use_galaxy_background_by_duskydeer-d82jaky.png");
         ImageView imgView = new ImageView(background);
         double width = background.getWidth();
@@ -71,10 +78,21 @@ public class Main extends Application {
                 mediaPlayer.play();
             }
         });
-
         menu.setCenter(startButton);
+
+        gameOver.setStyle("-fx-background-color: black;");
+        gameOver.setPrefSize(width, height);
+        Label endLabel = new Label("GAME OVER");
+        endLabel.setTextFill(Color.RED);
+        Font font = new Font("Arial", 60);
+        endLabel.setFont(font);
+
+        gameOver.setCenter(endLabel);
+
+
         scene = new Scene(sp);
         Scene menuScene = new Scene(menu);
+        Scene endScene = new Scene(gameOver);
         primaryStage.setTitle("Galactic Overdrive 3000");
         primaryStage.setScene(menuScene);
 
@@ -96,17 +114,23 @@ public class Main extends Application {
         enemyShip.setX(midScreen);
         enemyShip.setY(100);
 
-
-
-
         ships.add(userShip);
         ships.add(enemyShip);
 
         BoundingBox window = new BoundingBox(0, 0, width, height);
         //CollisionHandler ch = new CollisionHandler(ships);
 
+        lastTime = 0;
+        seconds = 0;
+
         new AnimationTimer(){
-            public void handle(long currentNanoTime){
+            public void handle(long now){
+                    if(now > lastTime + 1_000_000_000)
+                    {
+                        seconds++;
+                        lastTime = now;
+                        System.out.println(seconds);
+                    }
                     keyListener.listen();
                     updateShips(ships, window);    //Move ships and/or have the ships shoot
                     updateProjectiles(ships, window);
@@ -114,6 +138,12 @@ public class Main extends Application {
                     graphicsContext.clearRect(0, 0, width, height);  //Wipe Screen of all ships
                     drawShips(ships);                   //Draw updated ships
                     drawProjectiles(ships);
+                    if(ships.size() == 1)
+                    {
+                        System.out.println("game over");
+                        theStage.setScene(endScene);
+                    }
+                    //drawExplosion(100, 100);
             }
         }.start();
 
@@ -200,16 +230,49 @@ public class Main extends Application {
     }
 
     public void updateProjectiles(ArrayList<Spaceship> ships, BoundingBox window) {
+
+        Coordinate2D newPos;
+
+        int collisionWithShip = -1;
+
         for (Spaceship s : ships) {
             for (Projectile p : s.getProjectiles()) {
                 if (!window.contains(p.getX(), p.getY()))
                 {
                     p.destroy();
                 } else {
-                    p.tryToMove();
+                    newPos = p.tryToMove();
+                    collisionWithShip = checkShipCollisions(newPos.getX(), newPos.getY(), ships);
+                    if (collisionWithShip != -1)
+                    {
+                        System.out.println("ship collision");
+                        explosionSound();
+                        ships.remove(collisionWithShip);
+                    }
+                    else
+                    {
+                        p.setX(newPos.getX());
+                        p.setY(newPos.getY());
+                    }
+
                 }
             }
         }
+    }
+
+    public void explosionSound()
+    {
+        String musicFile2 = "boom.mp3";
+        Media sound2 = new Media(new File(musicFile2).toURI().toString());
+        MediaPlayer mediaPlayer2 = new MediaPlayer(sound2);
+        mediaPlayer2.play();
+    }
+
+    public void drawExplosion(double x, double y)
+    {
+        String imgName = "explosion.png";
+        Image explodeImage = new Image(new File(imgName).toURI().toString());
+        graphicsContext.drawImage(explodeImage, x, y, 80, 80);
     }
 
     public void drawProjectiles(ArrayList<Spaceship> ships) {
