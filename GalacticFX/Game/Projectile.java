@@ -18,21 +18,28 @@ public class Projectile {
     private Coordinate2D position;
 
 
-    public Projectile(Spaceship shipThatIsFiring, ImageView imageView) {
+    public Projectile(Spaceship shipThatIsFiring, ImageView imageView, int verticalSpeed) {
         this.imageView = imageView;
         this.shipFiredFrom = shipThatIsFiring;
         width = (int) imageView.boundsInParentProperty().getValue().getWidth();   //DEON: get width and height this way instead of a parameter
         height = (int) imageView.boundsInParentProperty().getValue().getHeight();
         position = getStartPosition();
 //        moveBehavior = new MoveBehavior();
-        verticalSpeed = 8;
+        this.verticalSpeed = verticalSpeed;
         destroyed = false;
     }
 
 
     public Coordinate2D tryToMove(){
 
-        Coordinate2D newPos = new Coordinate2D(position.getX(), position.getY()-verticalSpeed);
+        Coordinate2D newPos;
+        if(shipFiredFrom.getShipType().equals("User")) {
+            newPos = new Coordinate2D(position.getX(), position.getY() - verticalSpeed);
+        }
+        else
+        {
+            newPos = new Coordinate2D(position.getX(), position.getY() + verticalSpeed);
+        }
         return newPos;
         //position.translateY(-verticalSpeed);
     }
@@ -85,7 +92,13 @@ public class Projectile {
 
     private int getStartY() {
         int shipY = shipFiredFrom.getY();
-        return shipY-height;
+        if(shipFiredFrom.getShipType().equals("User")) {
+            return shipY-height;
+        }
+        else {
+            shipY = (int)(shipY+shipFiredFrom.getH());
+            return shipY;
+        }
     }
 
     public void destroy() {

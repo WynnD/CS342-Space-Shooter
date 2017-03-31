@@ -32,13 +32,14 @@ public class Main extends Application {
     Stage theStage;
     private int seconds;
     private long lastTime;
+    private BorderPane gameOver;
 
     @Override
     public void start(Stage primaryStage){
 
         theStage = primaryStage;
         BorderPane menu = new BorderPane();
-        BorderPane gameOver = new BorderPane();
+        gameOver = new BorderPane();
 
         //music to be played during game
         String musicFile1 = "spaceIntro.mp3";
@@ -88,8 +89,8 @@ public class Main extends Application {
 
         gameOver.setStyle("-fx-background-color: black;");
         gameOver.setPrefSize(width, height);
-        Label endLabel = new Label("GAME OVER");
-        endLabel.setTextFill(Color.RED);
+        Label endLabel = new Label("VICTORY");
+        endLabel.setTextFill(Color.GREENYELLOW);
         Font font = new Font("Arial", 60);
         endLabel.setFont(font);
         gameOver.setCenter(endLabel);
@@ -112,7 +113,7 @@ public class Main extends Application {
 
         Spaceship userShip = factory.makeShip("User");
         userShip.setX(midScreen);
-        userShip.setY(300);
+        userShip.setY((int) (height-100));
 
         Spaceship enemyShip = factory.makeShip("Enemy");
         enemyShip.setX(midScreen);
@@ -139,25 +140,31 @@ public class Main extends Application {
 
         new AnimationTimer(){
             public void handle(long now){
+                if(theStage.getScene() == scene) {
+                    //do something every second
                     if(now > lastTime + 1_000_000_000)
                     {
                         seconds++;
                         lastTime = now;
                         System.out.println(seconds);
+                        if(seconds%2 == 0)
+                            createProjectiles(ships);
                     }
-                    keyListener.listen();
-                    updateShips(ships, window);    //Move ships and/or have the ships shoot
-                    updateProjectiles(ships, window);
-                    deleteFlaggedProjectiles(ships);
-                    graphicsContext.clearRect(0, 0, width, height);  //Wipe Screen of all ships
-                    drawShips(ships);                   //Draw updated ships
-                    drawProjectiles(ships);
-                    if(ships.size() == 1)
-                    {
-                        System.out.println("game over");
-                        theStage.setScene(endScene);
+
+
+                        keyListener.listen();
+                        updateShips(ships, window);    //Move ships and/or have the ships shoot
+                        updateProjectiles(ships, window);
+                        deleteFlaggedProjectiles(ships);
+                        graphicsContext.clearRect(0, 0, width, height);  //Wipe Screen of all ships
+                        drawShips(ships);                   //Draw updated ships
+                        drawProjectiles(ships);
+                        if (ships.size() == 1) {
+                            System.out.println("game over");
+                            theStage.setScene(endScene);
+                        }
+                        //drawExplosion(100, 100);
                     }
-                    //drawExplosion(100, 100);
             }
         }.start();
 
@@ -167,6 +174,22 @@ public class Main extends Application {
 
     public static void main(String[] args){
         launch(args);
+    }
+
+    public void createProjectiles(ArrayList<Spaceship> ships)
+    {
+        for (Spaceship s : ships) {
+            if(!s.getShipType().equals("User")) {
+                ArrayList<Projectile> projectiles = s.getProjectiles();
+                String projectileImageName = "projectile_small.png";
+                Image projectileImage = new Image(new File(projectileImageName).toURI().toString());
+                ImageView projectileImageView = new ImageView(projectileImage);
+                projectileImageView.setFitHeight(10);
+                projectileImageView.setFitWidth(10);
+                projectiles.add(new Projectile(s, projectileImageView, 5));
+            }
+
+            }
     }
 
     public void deleteFlaggedProjectiles(ArrayList<Spaceship> ships) {
@@ -181,20 +204,22 @@ public class Main extends Application {
     }
 
 
-    public int checkShipCollisions(int newX, int newY, ArrayList<Spaceship> ships)
+    public int checkShipCollisions(int newX, int newY, int curShipIndex, ArrayList<Spaceship> ships)
     {
         int shipCollision = -1;
         Spaceship curShip;
 
-        for(int i = 1; i < ships.size(); i++)
+        for(int i = 0; i < ships.size(); i++)
         {
-            curShip = ships.get(i);
-            Rectangle rect = new Rectangle(); //basically a hitbox for the ship
-            rect.setBounds(curShip.getX(), curShip.getY(), (int)curShip.getW(), (int)curShip.getH());
-            if(rect.contains(newX, newY))
+            if(i != curShipIndex) //make sure ship isn't being compared with itself
             {
-                shipCollision = i;
-                return shipCollision;
+                curShip = ships.get(i);
+                Rectangle rect = new Rectangle(); //basically a hitbox for the ship
+                rect.setBounds(curShip.getX(), curShip.getY(), (int) curShip.getW(), (int) curShip.getH());
+                if (rect.contains(newX, newY)) {
+                    shipCollision = i;
+                    return shipCollision;
+                }
             }
         }
 
@@ -214,7 +239,7 @@ public class Main extends Application {
             if(s.getShipType().equals("User"))
             {
                 //returns ship index if collision otherwise -1
-                collisionWithShip = checkShipCollisions(newPosition.getX(), newPosition.getY(), ships);
+                collisionWithShip = checkShipCollisions(newPosition.getX(), newPosition.getY(), ships.indexOf(s), ships);
                 if (collisionWithShip != -1)
                 {
                     System.out.println("ship collision");
@@ -259,11 +284,21 @@ public class Main extends Application {
                     p.destroy();
                 } else {
                     newPos = p.tryToMove();
-                    collisionWithShip = checkShipCollisions(newPos.getX(), newPos.getY(), ships);
+                    collisionWithShip = checkShipCollisions(newPos.getX(), newPos.getY(), ships.indexOf(s), ships);
                     if (collisionWithShip != -1)
                     {
-                        System.out.println("ship collision");
+                        System.out.println("projectile collision");
                         explosionSound();
+                        if(collisionWithShip == 0)
+                        {
+                            System.out.println("User ship hit");
+                            Label loseLabel = new Label("GAME OVER");
+                            loseLabel.setTextFill(Color.RED);
+                            Font font = new Font("Arial", 60);
+                            loseLabel.setFont(font);
+                            gameOver.setCenter(loseLabel);
+                            theStage.setScene(endScene);
+                        }
                         ships.remove(collisionWithShip);
                         break outerloop; //go to next ship if this ship had a collision
                     }

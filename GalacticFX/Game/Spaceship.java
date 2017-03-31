@@ -15,6 +15,8 @@ public class Spaceship {
     private String shipType;
     private ImageView shipImage;
     private Coordinate2D position;
+    private double w, h;
+    private ArrayList<Projectile> projectiles;
 
     private Boolean canMove;
 
@@ -33,9 +35,6 @@ public class Spaceship {
     public void setH(double h) {
         this.h = h;
     }
-
-    private double w, h;
-    private ArrayList<Projectile> projectiles;
 
     public Spaceship(ImageView imageView, String shipType, GraphicsContext graphicsContext, KeyListen keyListen)
     {
