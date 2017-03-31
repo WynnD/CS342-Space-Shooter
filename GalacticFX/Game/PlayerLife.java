@@ -21,7 +21,7 @@ public class PlayerLife {
         this.w = 22;
         this.h = 18;
 
-        String lifeImageName = "playerLife3_green.png";
+        String lifeImageName = "Images/playerLife3_green.png";
         Image lifeImage = new Image(new File(lifeImageName).toURI().toString());
         ImageView newLifeImageView = new ImageView(lifeImage);
         newLifeImageView.setFitHeight(h);

@@ -43,11 +43,11 @@ public class Main extends Application {
         BorderPane menu = new BorderPane();
         gameOver = new BorderPane();
 
-        MusicPlayer menuSong = new MusicPlayer("spaceIntro.mp3");
+        MusicPlayer menuSong = new MusicPlayer("Music/spaceIntro.mp3");
         menuSong.playSong();
 
         //set background image
-        Sprite background = new Sprite("stars.jpg", 550, 700);
+        Sprite background = new Sprite("Images/stars.jpg", 550, 700);
 
         double width = background.getWidth();
         double height = background.getHeight();
@@ -70,7 +70,7 @@ public class Main extends Application {
                 menuSong.pauseSong();
                 //menuSong.pauseSong();
                 theStage.setScene(scene);
-                MusicPlayer gameSong = new MusicPlayer("Orbit.mp3");
+                MusicPlayer gameSong = new MusicPlayer("Music/Orbit.mp3");
                 gameSong.playSong();
             }
         });
@@ -209,7 +209,7 @@ public class Main extends Application {
         for (Spaceship s : ships) {
             if(!s.getShipType().equals("User")) {
                 ArrayList<Projectile> projectiles = s.getProjectiles();
-                Sprite projectileSprite = new Sprite("laserRed02.png", 8, 15);
+                Sprite projectileSprite = new Sprite("Images/laserRed02.png", 8, 15);
                 projectiles.add(new Projectile(s, projectileSprite.getImageView(), 5));
             }
 
@@ -360,7 +360,7 @@ public class Main extends Application {
 
     public void explosionSound()
     {
-        String musicFile2 = "boom.mp3";
+        String musicFile2 = "Music/boom.mp3";
         Media sound2 = new Media(new File(musicFile2).toURI().toString());
         MediaPlayer mediaPlayer2 = new MediaPlayer(sound2);
         mediaPlayer2.play();
@@ -368,7 +368,7 @@ public class Main extends Application {
 
     public void drawExplosion(double x, double y)
     {
-        String imgName = "explosion.png";
+        String imgName = "Images/explosion.png";
         Image explodeImage = new Image(new File(imgName).toURI().toString());
         graphicsContext.drawImage(explodeImage, x, y, 80, 80);
     }

@@ -22,11 +22,11 @@ public class ShipFactory {
     public Spaceship makeShip(String shipType) {
 
         if (shipType.equals("User")) {
-            Sprite userSprite = new Sprite("playerShip3_green.png", 45, 35);
+            Sprite userSprite = new Sprite("Images/playerShip3_green.png", 45, 35);
             Spaceship userShip = new Spaceship(userSprite.getImageView(), shipType, gc, keyListener);
             return userShip;
         } else if (shipType.equals("Enemy")) {
-            Sprite enemySprite = new Sprite("enemyRed1.png", 40, 40);
+            Sprite enemySprite = new Sprite("Images/enemyRed1.png", 40, 40);
             Spaceship enemyShip = new Spaceship(enemySprite.getImageView(), shipType, gc, keyListener);
             return enemyShip;
         }
