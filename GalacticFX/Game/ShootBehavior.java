@@ -35,11 +35,11 @@ public class ShootBehavior {
                 mediaPlayer2.play();
 
 
-                String projectileImageName = "projectile_small.png";
+                String projectileImageName = "laserGreen04.png";
                 Image projectileImage = new Image(new File(projectileImageName).toURI().toString());
                 ImageView projectileImageView = new ImageView(projectileImage);
-                projectileImageView.setFitHeight(10);
-                projectileImageView.setFitWidth(10);
+                projectileImageView.setFitHeight(15);
+                projectileImageView.setFitWidth(8);
                 projectiles.add(new Projectile(shipThatIsFiring, projectileImageView, 8));
                 alreadyShot = true;
             }
