@@ -9,19 +9,19 @@ import java.io.File;
 /**
  * Created by noemi_000 on 3/31/2017.
  */
-public class playerLife {
+public class PlayerLife {
     ImageView lifeImageView;
     double x, y;
     double w, h;
 
-    public playerLife(double x, double y)
+    public PlayerLife(double x, double y)
     {
         this.x = x;
         this.y = y;
-        this.w = 20;
-        this.h = 20;
+        this.w = 22;
+        this.h = 18;
 
-        String lifeImageName = "playerLife2_green.png";
+        String lifeImageName = "playerLife3_green.png";
         Image lifeImage = new Image(new File(lifeImageName).toURI().toString());
         ImageView newLifeImageView = new ImageView(lifeImage);
         newLifeImageView.setFitHeight(h);

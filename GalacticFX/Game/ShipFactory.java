@@ -22,24 +22,14 @@ public class ShipFactory {
     public Spaceship makeShip(String shipType) {
 
         if (shipType.equals("User")) {
-            String userImageName = "playerShip3_green.png";
-            Image userImage = new Image(new File(userImageName).toURI().toString());
-            //Image userImage = new Image("http://opengameart.org/sites/default/files/ship_0.png");
-            ImageView userImageView = new ImageView(userImage);
-            userImageView.setFitHeight(35);
-            userImageView.setFitWidth(45);
+            Sprite userSprite = new Sprite("playerShip3_green.png", 45, 35);
+            Spaceship userShip = new Spaceship(userSprite.getImageView(), shipType, gc, keyListener);
 
-            Spaceship userShip = new Spaceship(userImageView, shipType, gc, keyListener);
             return userShip;
         } else if (shipType.equals("Enemy")) {
-            String enemyImageName = "enemyRed1.png";
-            Image enemyImage = new Image(new File(enemyImageName).toURI().toString());
-            //Image enemyImage = new Image("https://s-media-cache-ak0.pinimg.com/originals/68/0c/d4/680cd456acb325c4918cbe672a839522.png");
-            ImageView enemyImageView = new ImageView(enemyImage);
-            enemyImageView.setFitHeight(40);
-            enemyImageView.setFitWidth(40);
+            Sprite enemySprite = new Sprite("enemyRed1.png", 40, 40);
+            Spaceship enemyShip = new Spaceship(enemySprite.getImageView(), shipType, gc, keyListener);
 
-            Spaceship enemyShip = new Spaceship(enemyImageView, shipType, gc, keyListener);
             return enemyShip;
 
         }

@@ -17,7 +17,6 @@ public class Spaceship {
     private Coordinate2D position;
     private double w, h;
     private ArrayList<Projectile> projectiles;
-
     private Boolean canMove;
 
     public double getW() {
@@ -65,6 +64,7 @@ public class Spaceship {
         shootBehavior.update();
     }
 
+    //maybe make gc a parameter and remove from this class
     public void drawShip() {
 
         gc.drawImage(shipImage.getImage(), this.getX(), this.getY(), w, h);

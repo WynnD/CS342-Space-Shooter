@@ -34,6 +34,7 @@ public class Main extends Application {
     private int seconds;
     private long lastTime;
     private BorderPane gameOver;
+    private CollisionHandler collisionHandler;
 
     @Override
     public void start(Stage primaryStage){
@@ -42,25 +43,14 @@ public class Main extends Application {
         BorderPane menu = new BorderPane();
         gameOver = new BorderPane();
 
-        //music to be played during game
-        String musicFile1 = "spaceIntro.mp3";
-        Media menuSound = new Media(new File(musicFile1).toURI().toString());
-        MediaPlayer mediaPlayerMenu = new MediaPlayer(menuSound);
-        mediaPlayerMenu.setCycleCount(MediaPlayer.INDEFINITE); //loops music
-        mediaPlayerMenu.play();
+        MusicPlayer menuSong = new MusicPlayer("spaceIntro.mp3");
+        menuSong.playSong();
 
         //set background image
-        String backgroundImageName = "stars.jpg";
-        Image background = new Image(new File(backgroundImageName).toURI().toString());
-        //Image background = new Image("http://orig10.deviantart.net/dda0/f/2014/285/2/f/free_for_use_galaxy_background_by_duskydeer-d82jaky.png");
-        ImageView imgView = new ImageView(background);
+        Sprite background = new Sprite("stars.jpg", 550, 700);
 
-        imgView.setFitHeight(700);
-        imgView.setFitWidth(550);
-        double width = imgView.getFitWidth();
-        double height = imgView.getFitHeight();
-        //double width = background.getWidth();
-        //double height = background.getHeight();
+        double width = background.getWidth();
+        double height = background.getHeight();
 
         //create canvas with size of background image
         Canvas canvas = new Canvas(width, height);
@@ -68,22 +58,20 @@ public class Main extends Application {
 
         //create stackpane for background image and canvas
         StackPane sp = new StackPane();
-        sp.getChildren().addAll(imgView, canvas);
+        sp.getChildren().addAll(background.getImageView(), canvas);
 
         menu.setStyle("-fx-background-color: black;");
         menu.setPrefSize(width, height);
         startButton = new Button("START");
-        startButton.setStyle("-fx-font: 36 impact; -fx-base: #0de818;");
+        startButton.setStyle("-fx-font: 48 impact; -fx-base: #0de818;");
         startButton.setOnAction(new EventHandler<ActionEvent>(){
             @Override
             public void handle(ActionEvent event) {
-                mediaPlayerMenu.pause();
+                menuSong.pauseSong();
+                //menuSong.pauseSong();
                 theStage.setScene(scene);
-                String musicFile = "Orbit.mp3";
-                Media sound = new Media(new File(musicFile).toURI().toString());
-                MediaPlayer mediaPlayer = new MediaPlayer(sound);
-                mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE); //loops music
-                mediaPlayer.play();
+                MusicPlayer gameSong = new MusicPlayer("Orbit.mp3");
+                gameSong.playSong();
             }
         });
         menu.setCenter(startButton);
@@ -92,7 +80,7 @@ public class Main extends Application {
         gameOver.setPrefSize(width, height);
         Label endLabel = new Label("VICTORY");
         endLabel.setTextFill(Color.GREENYELLOW);
-        Font font = new Font("Arial", 60);
+        Font font = new Font("Arial", 70);
         endLabel.setFont(font);
         gameOver.setCenter(endLabel);
 
@@ -111,13 +99,8 @@ public class Main extends Application {
 
         BoundingBox window = new BoundingBox(0, 0, width, height);
 
-        ArrayList<playerLife> lives = new ArrayList<playerLife>();
-        playerLife life1 = new playerLife(width-25, 10);
-        playerLife life2 = new playerLife(width-50, 10);
-        playerLife life3 = new playerLife(width-75, 10);
-        lives.add(life1);
-        lives.add(life2);
-        lives.add(life3);
+        ArrayList<PlayerLife> lives = new ArrayList<PlayerLife>();
+        initializeLives(lives);
 
         //CollisionHandler ch = new CollisionHandler(ships);
 
@@ -163,12 +146,23 @@ public class Main extends Application {
         launch(args);
     }
 
-    public void drawLives(ArrayList<playerLife> lives)
+    public void drawLives(ArrayList<PlayerLife> lives)
     {
-        for(playerLife life : lives)
+        for(PlayerLife life : lives)
         {
             life.drawLife(graphicsContext);
         }
+    }
+
+    public void initializeLives(ArrayList<PlayerLife> lives)
+    {
+        double width = graphicsContext.getCanvas().getWidth();
+        PlayerLife life1 = new PlayerLife(width-25, 10);
+        PlayerLife life2 = new PlayerLife(width-50, 10);
+        PlayerLife life3 = new PlayerLife(width-75, 10);
+        lives.add(life1);
+        lives.add(life2);
+        lives.add(life3);
     }
 
     public void initializeShips(ShipFactory factory, ArrayList<Spaceship> ships)
@@ -215,12 +209,8 @@ public class Main extends Application {
         for (Spaceship s : ships) {
             if(!s.getShipType().equals("User")) {
                 ArrayList<Projectile> projectiles = s.getProjectiles();
-                String projectileImageName = "laserRed02.png";
-                Image projectileImage = new Image(new File(projectileImageName).toURI().toString());
-                ImageView projectileImageView = new ImageView(projectileImage);
-                projectileImageView.setFitHeight(15);
-                projectileImageView.setFitWidth(8);
-                projectiles.add(new Projectile(s, projectileImageView, 5));
+                Sprite projectileSprite = new Sprite("laserRed02.png", 8, 15);
+                projectiles.add(new Projectile(s, projectileSprite.getImageView(), 5));
             }
 
             }
@@ -265,6 +255,7 @@ public class Main extends Application {
         BoundingBox windowWithShipAdjustment;
         int collisionWithShip = -1;
 
+        outerloop:
         for(Spaceship s: ships)
         {
 
@@ -277,9 +268,20 @@ public class Main extends Application {
                 if (collisionWithShip != -1)
                 {
                     System.out.println("ship collision");
+                    explosionSound();
+
+                    //collisionHandler.setGameOverScreen();
+                    Label loseLabel = new Label("GAME OVER");
+                    loseLabel.setTextFill(Color.RED);
+                    Font font = new Font("Arial", 70);
+                    loseLabel.setFont(font);
+                    gameOver.setCenter(loseLabel);
+                    theStage.setScene(endScene);
+
+                    /*System.out.println("ship collision");
                     ships.remove(collisionWithShip);
                     explosionSound();
-                    theStage.setScene(endScene);
+                    theStage.setScene(endScene);*/
                 }
             }
 
@@ -304,7 +306,7 @@ public class Main extends Application {
         }
     }
 
-    public void updateProjectiles(ArrayList<Spaceship> ships, BoundingBox window, ArrayList<playerLife> lives) {
+    public void updateProjectiles(ArrayList<Spaceship> ships, BoundingBox window, ArrayList<PlayerLife> lives) {
 
         Coordinate2D newPos;
 
@@ -325,6 +327,7 @@ public class Main extends Application {
                         explosionSound();
                         if(collisionWithShip == 0)
                         {
+                            //collisionHandler.handleUserHit(lives);
                             System.out.println("User ship hit");
                             lives.remove(lives.size()-1);
                             System.out.println("num lives: " + lives.size());
@@ -332,7 +335,7 @@ public class Main extends Application {
                             if(lives.size() == 0) {
                                 Label loseLabel = new Label("GAME OVER");
                                 loseLabel.setTextFill(Color.RED);
-                                Font font = new Font("Arial", 60);
+                                Font font = new Font("Arial", 70);
                                 loseLabel.setFont(font);
                                 gameOver.setCenter(loseLabel);
                                 theStage.setScene(endScene);
