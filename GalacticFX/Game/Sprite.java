@@ -13,7 +13,6 @@ import java.io.File;
 public class Sprite {
 
     private ImageView imageView;
-
     private double width, height;
 
     public Sprite(String imgName, double width, double height){

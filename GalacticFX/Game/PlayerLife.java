@@ -10,9 +10,10 @@ import java.io.File;
  * Created by noemi_000 on 3/31/2017.
  */
 public class PlayerLife {
-    ImageView lifeImageView;
-    double x, y;
-    double w, h;
+    private ImageView lifeImageView;
+    private double x, y;
+    private double w, h;
+    //sprite instead of w/h/imageview
 
     public PlayerLife(double x, double y)
     {
@@ -21,12 +22,8 @@ public class PlayerLife {
         this.w = 22;
         this.h = 18;
 
-        String lifeImageName = "Images/playerLife3_green.png";
-        Image lifeImage = new Image(new File(lifeImageName).toURI().toString());
-        ImageView newLifeImageView = new ImageView(lifeImage);
-        newLifeImageView.setFitHeight(h);
-        newLifeImageView.setFitWidth(w);
-        this.lifeImageView = newLifeImageView;
+        Sprite lifeSprite = new Sprite("Images/playerLife3_green.png", w, h);
+        this.lifeImageView = lifeSprite.getImageView();
     }
 
     public void drawLife(GraphicsContext gc){

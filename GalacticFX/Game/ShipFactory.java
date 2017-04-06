@@ -11,28 +11,28 @@ import java.io.File;
  */
 public class ShipFactory {
 
-    private GraphicsContext gc;
     private KeyListen keyListener;
 
-    public ShipFactory(GraphicsContext gc, KeyListen keyListener){
-        this.gc = gc;
+    public ShipFactory(KeyListen keyListener){
         this.keyListener = keyListener;
     }
 
-    public Spaceship makeShip(String shipType) {
+    public Spaceship makeShip(String shipType, int x, int y) {
+
+        Coordinate2D initialPosition = new Coordinate2D(x, y);
 
         if (shipType.equals("User")) {
             Sprite userSprite = new Sprite("Images/playerShip3_green.png", 45, 35);
-            Spaceship userShip = new Spaceship(userSprite.getImageView(), shipType, gc, keyListener);
+            Spaceship userShip = new UserSpaceship(shipType, userSprite, keyListener, initialPosition);
             return userShip;
-        } else if (shipType.equals("Enemy")) {
+        } else if (shipType.equals("Enemy1")) {
             Sprite enemySprite = new Sprite("Images/enemyRed1.png", 40, 40);
-            Spaceship enemyShip = new Spaceship(enemySprite.getImageView(), shipType, gc, keyListener);
+            Spaceship enemyShip = new EnemySpaceship1(shipType, enemySprite, initialPosition);
             return enemyShip;
+
+            //else if() for other shipTypes "Lvl 1 Enemy", "Lvl 2 Enemy", etc.
+        } else {
+            return null;
         }
-
-        //else if() for other shipTypes "Lvl 1 Enemy", "Lvl 2 Enemy", etc.
-
-        else return null;
     }
 }

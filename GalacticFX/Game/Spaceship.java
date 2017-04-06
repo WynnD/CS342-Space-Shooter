@@ -5,58 +5,36 @@ import javafx.scene.image.ImageView;
 
 import java.util.ArrayList;
 
+/**
+ * Created by noemi_000 on 4/6/2017.
+ */
+public abstract class Spaceship {
 
-public class Spaceship {
+    protected MoveBehavior moveBehavior;
+    protected ShootBehavior shootBehavior;
+    protected String shipType;
+    protected Sprite shipSprite;
+    protected ArrayList<Projectile> projectiles;
+    protected Coordinate2D position;
 
-    private MoveBehavior moveBehavior;
-    private ShootBehavior shootBehavior;
-    private GraphicsContext gc;
-    private KeyListen keyListener;
-    private String shipType;
-    private ImageView shipImage;
-    private Coordinate2D position;
-    private double w, h;
-    private ArrayList<Projectile> projectiles;
-    private Boolean canMove;
-
-    public double getW() {
-        return w;
-    }
-
-    public void setW(double w) {
-        this.w = w;
-    }
-
-    public double getH() {
-        return h;
-    }
-
-    public void setH(double h) {
-        this.h = h;
-    }
-
-    public Spaceship(ImageView imageView, String shipType, GraphicsContext graphicsContext, KeyListen keyListen)
+    public Spaceship(String shipType, Sprite shipSprite, Coordinate2D position)
     {
-        shipImage = imageView;
         this.shipType = shipType;
-
-        gc = graphicsContext;
-        keyListener = keyListen;
-
-        w = imageView.boundsInParentProperty().getValue().getWidth();   //DEON: get width and height this way instead of a parameter
-        h = imageView.boundsInParentProperty().getValue().getHeight();
-
+        this.shipSprite = shipSprite;
+        this.position = position;
         projectiles = new ArrayList<>();
-        moveBehavior = new MoveBehavior(this);
-        shootBehavior = new ShootBehavior(this, keyListener, projectiles);
-        this.position = new Coordinate2D(0,0);
-        this.canMove = true;
+
     }
 
+    public void moveShip(Coordinate2D newPosition)
+    {
+        this.position = newPosition;
+        moveBehavior.setCurrentPosition(newPosition);
+    }
 
     public Coordinate2D tryToMove(){
 
-        Coordinate2D newPosition = moveBehavior.update(keyListener);
+        Coordinate2D newPosition = moveBehavior.tryToMove();
         return newPosition;
     }
 
@@ -64,41 +42,53 @@ public class Spaceship {
         shootBehavior.update();
     }
 
-    //maybe make gc a parameter and remove from this class
-    public void drawShip() {
+    public void display(GraphicsContext gc) {
 
-        gc.drawImage(shipImage.getImage(), this.getX(), this.getY(), w, h);
-    }
-
-    public ImageView getImageView() {
-        return shipImage;
-    }
-
-    public void setPosition(int x, int y)
-    {
-        position.setX(x);
-        position.setY(y);
-    }
-
-    public int getX() { return position.getX(); }
-
-    public int getY() { return position.getY(); }
-
-    public void setX(int x) { position.setX(x); }
-
-    public void setY(int y) { position.setY(y); }
-
-    public void translateX(int offset) {
-        position.translateX(offset);
-    }
-
-    public void translateY(int offset) {
-        position.translateY(offset);
+        gc.drawImage(shipSprite.getImageView().getImage(), position.getX(), position.getY(), shipSprite.getWidth(), shipSprite.getHeight());
     }
 
     public String getShipType(){ return shipType; }
 
     public ArrayList<Projectile> getProjectiles() {
         return projectiles;
+    }
+
+    public int getX() { return position.getX(); }
+
+    public int getY() { return position.getY(); }
+
+    public double getW() { return shipSprite.getWidth(); }
+
+    public double getH() { return shipSprite.getHeight(); }
+
+    public Sprite getShipSprite()
+    {
+        return shipSprite;
+    }
+}
+
+class UserSpaceship extends Spaceship
+{
+    private KeyListen keyListener;
+    private ArrayList<PlayerLife> lives;
+
+    public UserSpaceship(String shipType, Sprite shipSprite, KeyListen keyListener, Coordinate2D position)
+    {
+        super(shipType, shipSprite, position);
+
+        this.keyListener = keyListener;
+        this.moveBehavior = new UserMoveBehavior(position, keyListener);
+        this.shootBehavior = new ShootBehavior(this, keyListener, projectiles);
+    }
+
+}
+
+class EnemySpaceship1 extends Spaceship
+{
+    public EnemySpaceship1(String shipType, Sprite shipSprite, Coordinate2D position )
+    {
+        super(shipType, shipSprite, position);
+
+        this.moveBehavior = new HorizontalMoveBehavior(position);
     }
 }

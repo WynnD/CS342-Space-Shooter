@@ -6,7 +6,6 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
@@ -22,19 +21,19 @@ import java.awt.*;
 import java.io.File;
 import java.util.*;
 
-//TODO: add musicHandler class, migrate things to collisionHandler (cleanup main)
-//TODO: upgrades, levels, scoring, save/pause, multiple enemies, explosion animation
+//TODO: migrate things to collisionHandler (cleanup main)
+//TODO: upgrades, levels, scoring, save/pause/restart, enemy flying patterns, explosion animation
 
 public class Main extends Application {
     private GraphicsContext graphicsContext;
-    Button startButton;
+    private Button startButton;
     Scene scene;
     private Scene endScene;
     Stage theStage;
     private int seconds;
     private long lastTime;
     private BorderPane gameOver;
-    private CollisionHandler collisionHandler;
+    //private CollisionHandler collisionHandler;
 
     @Override
     public void start(Stage primaryStage){
@@ -68,7 +67,6 @@ public class Main extends Application {
             @Override
             public void handle(ActionEvent event) {
                 menuSong.pauseSong();
-                //menuSong.pauseSong();
                 theStage.setScene(scene);
                 MusicPlayer gameSong = new MusicPlayer("Music/Orbit.mp3");
                 gameSong.playSong();
@@ -92,14 +90,13 @@ public class Main extends Application {
 
         KeyListen keyListener = new KeyListen(scene);
 
-        ArrayList<Spaceship> ships = new ArrayList<Spaceship>();
-
-        ShipFactory factory = new ShipFactory(graphicsContext, keyListener);
+        ArrayList<Spaceship> ships = new ArrayList<>();
+        ShipFactory factory = new ShipFactory(keyListener);
         initializeShips(factory, ships);
 
         BoundingBox window = new BoundingBox(0, 0, width, height);
 
-        ArrayList<PlayerLife> lives = new ArrayList<PlayerLife>();
+        ArrayList<PlayerLife> lives = new ArrayList<>();
         initializeLives(lives);
 
         //CollisionHandler ch = new CollisionHandler(ships);
@@ -115,7 +112,7 @@ public class Main extends Application {
                     {
                         seconds++;
                         lastTime = now;
-                        //System.out.println(seconds);
+                        System.out.println(seconds);
                         if(seconds%2 == 0)
                             createProjectiles(ships);
                     }
@@ -140,7 +137,6 @@ public class Main extends Application {
 
         primaryStage.show();
     }
-
 
     public static void main(String[] args){
         launch(args);
@@ -171,30 +167,14 @@ public class Main extends Application {
         int midScreen = (int) ((width)/2);
         double height = graphicsContext.getCanvas().getHeight();
 
-        Spaceship userShip = factory.makeShip("User");
-        //userShip.setPosition(midScreen, ((int)(height-100)) );
-        userShip.setX(midScreen);
-        userShip.setY((int) (height-100));
+        Spaceship userShip = factory.makeShip("User", midScreen, (int)height-100);
 
-        Spaceship enemyShip = factory.makeShip("Enemy");
-        enemyShip.setX(midScreen);
-        enemyShip.setY(100);
-
-        Spaceship enemyShip2 = factory.makeShip("Enemy");
-        enemyShip2.setX(midScreen - 70);
-        enemyShip2.setY(50);
-
-        Spaceship enemyShip3 = factory.makeShip("Enemy");
-        enemyShip3.setX(midScreen - 140);
-        enemyShip3.setY(100);
-
-        Spaceship enemyShip4 = factory.makeShip("Enemy");
-        enemyShip4.setX(midScreen + 70);
-        enemyShip4.setY(50);
-
-        Spaceship enemyShip5 = factory.makeShip("Enemy");
-        enemyShip5.setX(midScreen + 140);
-        enemyShip5.setY(100);
+        //can possibly put enemy ship creation in a loop?
+        Spaceship enemyShip = factory.makeShip("Enemy1", midScreen, 100);
+        Spaceship enemyShip2 = factory.makeShip("Enemy1", midScreen-70, 50);
+        Spaceship enemyShip3 = factory.makeShip("Enemy1", midScreen-140, 100);
+        Spaceship enemyShip4 = factory.makeShip("Enemy1", midScreen+70, 50);
+        Spaceship enemyShip5 = factory.makeShip("Enemy1", midScreen+140, 100);
 
         ships.add(userShip);
         ships.add(enemyShip);
@@ -255,7 +235,6 @@ public class Main extends Application {
         BoundingBox windowWithShipAdjustment;
         int collisionWithShip = -1;
 
-        outerloop:
         for(Spaceship s: ships)
         {
 
@@ -290,11 +269,12 @@ public class Main extends Application {
 
             if (windowWithShipAdjustment.contains(newPosition.getX(), newPosition.getY()) && collisionWithShip == -1)
             {
-                s.setX(newPosition.getX());
-                s.setY(newPosition.getY());
+                s.moveShip(newPosition);
             }
 
-            s.tryToShoot();
+            if(s.getShipType().equals("User")) {
+                s.tryToShoot();
+            }
         }
     }
 
@@ -302,7 +282,8 @@ public class Main extends Application {
     {
         for(Spaceship s: ships)
         {
-           s.drawShip();
+           //s.drawShip();
+           s.display(graphicsContext);
         }
     }
 

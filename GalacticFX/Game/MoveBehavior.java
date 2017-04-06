@@ -1,62 +1,81 @@
 package Game;
 
-import javafx.event.EventHandler;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.KeyCode;
-import javafx.scene.Scene;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.StackPane;
-
 /**
- * Created by Deon on 3/23/2017.
+ * Created by noemi_000 on 4/5/2017.
  */
-public class MoveBehavior {
 
-    private Spaceship ship;
-    private boolean moveRight;
-    private boolean moveLeft = true;
-    private int position = 0;
 
-    public MoveBehavior (Spaceship ship) {
-        this.ship = ship;
+public abstract class MoveBehavior {
+
+    protected Coordinate2D currentPosition;
+
+    public MoveBehavior(Coordinate2D initialPosition)
+    {
+        this.currentPosition = initialPosition;
     }
 
-    public Coordinate2D update(KeyListen keyListener){
-        Coordinate2D newPos = new Coordinate2D(ship.getX(), ship.getY());
-
-        if(ship.getShipType().equals("User")){
-            newPos = userMoveBehavior(keyListener);
-        }
-        else if(ship.getShipType().equals("Enemy")){
-            newPos = enemyMoveBehavior(keyListener);
-        }
-
-        return newPos;
+    public Coordinate2D getCurrentPosition() {
+        return currentPosition;
     }
 
-    public Coordinate2D userMoveBehavior(KeyListen keyListener){
-        Coordinate2D newPosition = new Coordinate2D(ship.getX(), ship.getY());
-        if (keyListener.getRightKeyPressed()) {
+    public void setCurrentPosition(Coordinate2D currentPosition) {
+        this.currentPosition = currentPosition;
+    }
+
+    public abstract Coordinate2D tryToMove();
+
+}
+
+class UserMoveBehavior extends MoveBehavior{
+
+    private KeyListen keylistener;
+
+    public UserMoveBehavior(Coordinate2D initalPosition, KeyListen keylistener)
+    {
+        super(initalPosition);
+        this.keylistener = keylistener;
+    }
+
+    @Override
+    public Coordinate2D tryToMove()
+    {
+        Coordinate2D newPosition = new Coordinate2D(currentPosition.getX(),currentPosition.getY());
+        if (keylistener.getRightKeyPressed()) {
             newPosition.translateX(5);
         }
-        if (keyListener.getLeftKeyPressed()){
+        if (keylistener.getLeftKeyPressed()){
             newPosition.translateX(-5);
         }
-        if (keyListener.getDownKeyPressed()){
+        if (keylistener.getDownKeyPressed()){
             newPosition.translateY(5);
         }
-        if (keyListener.getUpKeyPressed()) {
+        if (keylistener.getUpKeyPressed()) {
             newPosition.translateY(-5);
         }
 
         return newPosition;
+    }
+}
 
+class HorizontalMoveBehavior extends MoveBehavior{
+    private boolean moveRight;
+    private boolean moveLeft;
+    private int position;
+
+    public HorizontalMoveBehavior(Coordinate2D initialPosition)
+    {
+        super(initialPosition);
+        this.moveRight = false;
+        this.moveLeft = true;
+        this.position = 0;
     }
 
-    public Coordinate2D enemyMoveBehavior(KeyListen keyListener) {
-        Coordinate2D newPosition = new Coordinate2D(ship.getX(), ship.getY());
+    @Override
+    public Coordinate2D tryToMove()
+    {
+        Coordinate2D newPosition = new Coordinate2D(currentPosition.getX(),currentPosition.getY());
+
         if(moveLeft){
-            //System.out.println("moveleft");
             if(position > -100) {
                 position -= 2;
                 newPosition.translateX(-2);
@@ -67,20 +86,19 @@ public class MoveBehavior {
             }
         }
         else if(moveRight){
-            //System.out.println("moveright");
             if(position < 100){
                 position+=2;
                 newPosition.translateX(2);
             }
-
             else{
                 moveLeft = true;
                 moveRight = false;
             }
-
         }
 
         return newPosition;
     }
 
+
 }
+

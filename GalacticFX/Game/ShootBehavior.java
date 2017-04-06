@@ -28,7 +28,7 @@ public class ShootBehavior {
 
     public void update(){
         if(keyListener.getSpaceBarPressed()) {
-            if(alreadyShot == false && shipThatIsFiring.getShipType().equals("User")) {
+            if(!alreadyShot && shipThatIsFiring.getShipType().equals("User")) {
                 String musicFile2 = "Music/shooting.mp3";
                 Media sound2 = new Media(new File(musicFile2).toURI().toString());
                 MediaPlayer mediaPlayer2 = new MediaPlayer(sound2);

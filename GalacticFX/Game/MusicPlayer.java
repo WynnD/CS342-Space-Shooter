@@ -9,7 +9,7 @@ import java.io.File;
  * Created by noemi_000 on 3/31/2017.
  */
 public class MusicPlayer {
-    MediaPlayer mediaPlayer;
+    private MediaPlayer mediaPlayer;
 
     public MusicPlayer(String musicFile)
     {
