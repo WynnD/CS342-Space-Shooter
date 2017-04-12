@@ -11,6 +11,11 @@ public class Coordinate2D {
         this.y = y;
     }
 
+    public Coordinate2D(Coordinate2D c) {
+        this.x = c.getX();
+        this.y = c.getY();
+    }
+
     public int getX() {
         return x;
     }
