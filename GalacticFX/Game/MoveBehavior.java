@@ -5,7 +5,7 @@ package Game;
  */
 public interface MoveBehavior {
 
-    Coordinate2D tryToMove();
+    Coordinate2D getNextPosition();
 }
 
 class UserMoveBehavior implements MoveBehavior {
@@ -20,22 +20,24 @@ class UserMoveBehavior implements MoveBehavior {
     }
 
     @Override
-    public Coordinate2D tryToMove()
+    public Coordinate2D getNextPosition()
     {
+        Coordinate2D new_position = new Coordinate2D(ship.getX(), ship.getY());
+
         if (keylistener.getRightKeyPressed()) {
-            ship.position.translateX(5);
+            new_position.translateX(5);
         }
         if (keylistener.getLeftKeyPressed()){
-            ship.position.translateX(-5);
+            new_position.translateX(-5);
         }
         if (keylistener.getDownKeyPressed()){
-            ship.position.translateY(5);
+            new_position.translateY(5);
         }
         if (keylistener.getUpKeyPressed()) {
-            ship.position.translateY(-5);
+            new_position.translateY(-5);
         }
 
-        return ship.position;
+        return new_position;
     }
 }
 
@@ -54,12 +56,13 @@ class HorizontalMoveBehavior implements MoveBehavior {
     }
 
     @Override
-    public Coordinate2D tryToMove()
+    public Coordinate2D getNextPosition()
     {
+        Coordinate2D new_position = new Coordinate2D(ship.getX(), ship.getY());
         if(moveLeft){
             if(position > -100) {
                 position -= 2;
-                ship.position.translateX(-2);
+                new_position.translateX(-2);
             }
             else{
                 moveRight = true;
@@ -69,7 +72,7 @@ class HorizontalMoveBehavior implements MoveBehavior {
         else if(moveRight){
             if(position < 100){
                 position+=2;
-                ship.position.translateX(2);
+                new_position.translateX(2);
             }
             else{
                 moveLeft = true;
@@ -77,7 +80,7 @@ class HorizontalMoveBehavior implements MoveBehavior {
             }
         }
 
-        return ship.position;
+        return new_position;
     }
 
 }

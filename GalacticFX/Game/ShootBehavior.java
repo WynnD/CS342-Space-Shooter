@@ -1,26 +1,28 @@
 package Game;
 
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
 import java.io.File;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
  * Created by Deon on 3/23/2017.
  */
-public class ShootBehavior {
+public interface ShootBehavior {
+    void update();
+}
+
+class ShootOneBullet implements ShootBehavior {
 
     private boolean alreadyShot = false;
     private Spaceship shipThatIsFiring;
     private KeyListen keyListener;
     private ArrayList<Projectile> projectiles;
 
-    public ShootBehavior(Spaceship shipThatIsFiring, KeyListen keyListener, ArrayList<Projectile> projectiles) {
+    public ShootOneBullet(Spaceship shipThatIsFiring, KeyListen keyListener, ArrayList<Projectile> projectiles) {
         this.shipThatIsFiring = shipThatIsFiring;
         this.keyListener = keyListener;
         this.projectiles = projectiles;

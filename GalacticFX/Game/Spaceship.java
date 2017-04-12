@@ -31,7 +31,7 @@ public class Spaceship {
     }
 
     public Coordinate2D tryToMove(){
-        return moveBehavior.tryToMove();
+        return moveBehavior.getNextPosition();
     }
 
     public Coordinate2D getPosition() {
@@ -77,7 +77,7 @@ class UserSpaceship extends Spaceship
 
         this.keyListener = keyListener;
         this.moveBehavior = new UserMoveBehavior(this);
-        this.shootBehavior = new ShootBehavior(this, keyListener, projectiles);
+        this.shootBehavior = new ShootOneBullet(this, keyListener, projectiles);
     }
 
     public KeyListen getKeyListener() {
