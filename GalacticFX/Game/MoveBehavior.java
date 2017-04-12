@@ -1,70 +1,53 @@
 package Game;
 
 /**
- * Created by noemi_000 on 4/5/2017.
+ * Created by Wynn on 4/12/2017.
  */
+public interface MoveBehavior {
 
-
-public abstract class MoveBehavior {
-
-    protected Coordinate2D currentPosition;
-
-    public MoveBehavior(Coordinate2D initialPosition)
-    {
-        this.currentPosition = initialPosition;
-    }
-
-    public Coordinate2D getCurrentPosition() {
-        return currentPosition;
-    }
-
-    public void setCurrentPosition(Coordinate2D currentPosition) {
-        this.currentPosition = currentPosition;
-    }
-
-    public abstract Coordinate2D tryToMove();
-
+    Coordinate2D tryToMove();
 }
 
-class UserMoveBehavior extends MoveBehavior{
+class UserMoveBehavior implements MoveBehavior {
 
     private KeyListen keylistener;
+    private UserSpaceship ship;
 
-    public UserMoveBehavior(Coordinate2D initalPosition, KeyListen keylistener)
+    public UserMoveBehavior(UserSpaceship ship)
     {
-        super(initalPosition);
-        this.keylistener = keylistener;
+        this.ship = ship;
+        this.keylistener = ship.getKeyListener();
     }
 
     @Override
     public Coordinate2D tryToMove()
     {
-        Coordinate2D newPosition = new Coordinate2D(currentPosition.getX(),currentPosition.getY());
         if (keylistener.getRightKeyPressed()) {
-            newPosition.translateX(5);
+            ship.position.translateX(5);
         }
         if (keylistener.getLeftKeyPressed()){
-            newPosition.translateX(-5);
+            ship.position.translateX(-5);
         }
         if (keylistener.getDownKeyPressed()){
-            newPosition.translateY(5);
+            ship.position.translateY(5);
         }
         if (keylistener.getUpKeyPressed()) {
-            newPosition.translateY(-5);
+            ship.position.translateY(-5);
         }
 
-        return newPosition;
+        return ship.position;
     }
 }
 
-class HorizontalMoveBehavior extends MoveBehavior{
+class HorizontalMoveBehavior implements MoveBehavior {
     private boolean moveRight;
     private boolean moveLeft;
     private int position;
+    private Spaceship ship;
 
-    public HorizontalMoveBehavior(Coordinate2D initialPosition)
+    public HorizontalMoveBehavior(Spaceship ship)
     {
-        super(initialPosition);
+        this.ship = ship;
         this.moveRight = false;
         this.moveLeft = true;
         this.position = 0;
@@ -73,12 +56,10 @@ class HorizontalMoveBehavior extends MoveBehavior{
     @Override
     public Coordinate2D tryToMove()
     {
-        Coordinate2D newPosition = new Coordinate2D(currentPosition.getX(),currentPosition.getY());
-
         if(moveLeft){
             if(position > -100) {
                 position -= 2;
-                newPosition.translateX(-2);
+                ship.position.translateX(-2);
             }
             else{
                 moveRight = true;
@@ -88,7 +69,7 @@ class HorizontalMoveBehavior extends MoveBehavior{
         else if(moveRight){
             if(position < 100){
                 position+=2;
-                newPosition.translateX(2);
+                ship.position.translateX(2);
             }
             else{
                 moveLeft = true;
@@ -96,9 +77,8 @@ class HorizontalMoveBehavior extends MoveBehavior{
             }
         }
 
-        return newPosition;
+        return ship.position;
     }
-
 
 }
 

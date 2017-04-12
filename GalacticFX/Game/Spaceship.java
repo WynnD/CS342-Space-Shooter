@@ -1,7 +1,6 @@
 package Game;
 
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.ImageView;
 
 import java.util.ArrayList;
 
@@ -29,13 +28,14 @@ public class Spaceship {
     public void moveShip(Coordinate2D newPosition)
     {
         this.position = newPosition;
-        moveBehavior.setCurrentPosition(newPosition);
     }
 
     public Coordinate2D tryToMove(){
+        return moveBehavior.tryToMove();
+    }
 
-        Coordinate2D newPosition = moveBehavior.tryToMove();
-        return newPosition;
+    public Coordinate2D getPosition() {
+        return position;
     }
 
     public void tryToShoot() {
@@ -76,8 +76,12 @@ class UserSpaceship extends Spaceship
         super(shipType, shipSprite, position);
 
         this.keyListener = keyListener;
-        this.moveBehavior = new UserMoveBehavior(position, keyListener);
+        this.moveBehavior = new UserMoveBehavior(this);
         this.shootBehavior = new ShootBehavior(this, keyListener, projectiles);
+    }
+
+    public KeyListen getKeyListener() {
+        return keyListener;
     }
 
 }
@@ -88,6 +92,6 @@ class EnemySpaceship1 extends Spaceship
     {
         super(shipType, shipSprite, position);
 
-        this.moveBehavior = new HorizontalMoveBehavior(position);
+        this.moveBehavior = new HorizontalMoveBehavior(this);
     }
 }
