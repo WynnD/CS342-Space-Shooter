@@ -15,6 +15,7 @@ public class MusicPlayer {
     {
         Media Sound = new Media(new File(musicFile).toURI().toString());
         MediaPlayer newMediaPlayer = new MediaPlayer(Sound);
+        newMediaPlayer.setVolume(0.7);
         newMediaPlayer.setCycleCount(MediaPlayer.INDEFINITE); //loops music
         this.mediaPlayer = newMediaPlayer;
     }
