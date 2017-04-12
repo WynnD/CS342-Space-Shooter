@@ -31,7 +31,7 @@ public abstract class Spaceship {
     }
 
     public Coordinate2D tryToMove(){
-        return moveBehavior.tryToMove();
+        return moveBehavior.getNextPosition();
     }
 
     public Coordinate2D getPosition() {
