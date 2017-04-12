@@ -8,7 +8,7 @@ import java.util.ArrayList;
 /**
  * Created by noemi_000 on 4/6/2017.
  */
-public abstract class Spaceship {
+public class Spaceship {
 
     protected MoveBehavior moveBehavior;
     protected ShootBehavior shootBehavior;
@@ -70,7 +70,6 @@ public abstract class Spaceship {
 class UserSpaceship extends Spaceship
 {
     private KeyListen keyListener;
-    private ArrayList<PlayerLife> lives;
 
     public UserSpaceship(String shipType, Sprite shipSprite, KeyListen keyListener, Coordinate2D position)
     {

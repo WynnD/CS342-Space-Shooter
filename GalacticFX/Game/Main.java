@@ -72,6 +72,11 @@ public class Main extends Application {
                 gameSong.playSong();
             }
         });
+
+        Sprite gameText = new Sprite("Images/galacticTxt.png", 550, 250);
+
+        menu.setTop(gameText.getImageView());
+
         menu.setCenter(startButton);
 
         gameOver.setStyle("-fx-background-color: black;");
@@ -94,10 +99,11 @@ public class Main extends Application {
         ShipFactory factory = new ShipFactory(keyListener);
         initializeShips(factory, ships);
 
-        BoundingBox window = new BoundingBox(0, 0, width, height);
-
         ArrayList<PlayerLife> lives = new ArrayList<>();
         initializeLives(lives);
+
+
+        BoundingBox window = new BoundingBox(0, 0, width, height);
 
         //CollisionHandler ch = new CollisionHandler(ships);
 
@@ -282,7 +288,6 @@ public class Main extends Application {
     {
         for(Spaceship s: ships)
         {
-           //s.drawShip();
            s.display(graphicsContext);
         }
     }
