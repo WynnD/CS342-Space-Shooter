@@ -22,7 +22,7 @@ class UserMoveBehavior implements MoveBehavior {
     @Override
     public Coordinate2D getNextPosition()
     {
-        Coordinate2D new_position = new Coordinate2D(ship.getX(), ship.getY());
+        Coordinate2D new_position = new Coordinate2D(ship.getPosition());
 
         if (keylistener.getRightKeyPressed()) {
             new_position.translateX(5);
@@ -58,7 +58,7 @@ class HorizontalMoveBehavior implements MoveBehavior {
     @Override
     public Coordinate2D getNextPosition()
     {
-        Coordinate2D new_position = new Coordinate2D(ship.getX(), ship.getY());
+        Coordinate2D new_position = new Coordinate2D(ship.getPosition());
         if(moveLeft){
             if(position > -100) {
                 position -= 2;
