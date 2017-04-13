@@ -1,8 +1,10 @@
 package Game;
 
+import com.sun.deploy.config.VerboseDefaultConfig;
 import javafx.scene.canvas.GraphicsContext;
 
 import java.util.ArrayList;
+import java.util.Vector;
 
 /**
  * Created by noemi_000 on 4/6/2017.
@@ -65,6 +67,7 @@ public abstract class Spaceship {
     {
         return shipSprite;
     }
+
 }
 
 class UserSpaceship extends Spaceship
@@ -89,10 +92,20 @@ class UserSpaceship extends Spaceship
 
 class EnemySpaceship1 extends Spaceship
 {
+    private Vector2D velocity;
+
     public EnemySpaceship1(String shipType, Sprite shipSprite, Coordinate2D position )
     {
         super(shipType, shipSprite, position);
-
+        this.velocity = new Vector2D(-2,0);
         this.moveBehavior = new HorizontalMoveBehavior(this);
+    }
+
+    public Vector2D getVelocityVector() {
+        return velocity;
+    }
+
+    public void setVelocity(Vector2D vect) {
+        this.velocity = vect;
     }
 }
