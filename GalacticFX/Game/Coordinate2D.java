@@ -39,4 +39,9 @@ public class Coordinate2D {
     public void translateY(int offset) {
         setY(getY()+offset);
     }
+
+    public void applyVelocity(Vector2D vector) {
+        this.x += vector.getXComponent();
+        this.y += vector.getYComponent();
+    }
 }
