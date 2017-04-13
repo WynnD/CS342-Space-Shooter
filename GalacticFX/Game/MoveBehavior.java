@@ -13,6 +13,7 @@ class UserMoveBehavior implements MoveBehavior {
     private KeyListen keylistener;
     private UserSpaceship ship;
 
+
     public UserMoveBehavior(UserSpaceship ship)
     {
         this.ship = ship;

@@ -80,6 +80,7 @@ class UserSpaceship extends Spaceship
         this.shootBehavior = new ShootOneBullet(this, keyListener, projectiles);
     }
 
+
     public KeyListen getKeyListener() {
         return keyListener;
     }
