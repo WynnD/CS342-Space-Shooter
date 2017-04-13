@@ -70,7 +70,6 @@ public abstract class Spaceship {
 class UserSpaceship extends Spaceship
 {
     private KeyListen keyListener;
-    private ArrayList<PlayerLife> lives;
 
     public UserSpaceship(String shipType, Sprite shipSprite, KeyListen keyListener, Coordinate2D position)
     {
@@ -80,6 +79,7 @@ class UserSpaceship extends Spaceship
         this.moveBehavior = new UserMoveBehavior(this);
         this.shootBehavior = new ShootOneBullet(this, keyListener, projectiles);
     }
+
 
     public KeyListen getKeyListener() {
         return keyListener;
