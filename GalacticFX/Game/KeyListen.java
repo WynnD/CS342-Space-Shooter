@@ -26,13 +26,13 @@ public class KeyListen {
     public void listen(){
         scene.getRoot().requestFocus();
         scene.setOnKeyPressed(e -> {
-            if (e.getCode() == KeyCode.RIGHT) {
+            if (e.getCode() == KeyCode.RIGHT || e.getCode() == KeyCode.D) {
                 setRightKeyPressed(true);
-            } else if (e.getCode() == KeyCode.LEFT) {
+            } else if (e.getCode() == KeyCode.LEFT || e.getCode() == KeyCode.A) {
                 setLeftKeyPressed(true);
-            } else if (e.getCode() == KeyCode.UP) {
+            } else if (e.getCode() == KeyCode.UP   || e.getCode() == KeyCode.W) {
                 setUpKeyPressed(true);
-            } else if (e.getCode() == KeyCode.DOWN) {
+            } else if (e.getCode() == KeyCode.DOWN || e.getCode() == KeyCode.S) {
                 setDownKeyPressed(true);
             } else if (e.getCode() == KeyCode.SPACE) {
                 setSpaceBarPressed(true);
@@ -41,13 +41,13 @@ public class KeyListen {
 
 
         scene.setOnKeyReleased(e -> {
-            if (e.getCode() == KeyCode.RIGHT) {
+            if (e.getCode() == KeyCode.RIGHT || e.getCode() == KeyCode.D) {
                 setRightKeyPressed(false);
-            } else if (e.getCode() == KeyCode.LEFT) {
+            } else if (e.getCode() == KeyCode.LEFT || e.getCode() == KeyCode.A) {
                 setLeftKeyPressed(false);
-            } else if (e.getCode() == KeyCode.UP) {
+            } else if (e.getCode() == KeyCode.UP || e.getCode() == KeyCode.W) {
                 setUpKeyPressed(false);
-            } else if (e.getCode() == KeyCode.DOWN) {
+            } else if (e.getCode() == KeyCode.DOWN || e.getCode() == KeyCode.S) {
                 setDownKeyPressed(false);
             } else if (e.getCode() == KeyCode.SPACE) {
                 setSpaceBarPressed(false);
