@@ -17,6 +17,7 @@ public class Spaceship {
     protected Sprite shipSprite;
     protected ArrayList<Projectile> projectiles;
     protected Coordinate2D position;
+    private boolean destroyed;
 
     public Spaceship(String shipType, Sprite shipSprite, Coordinate2D position)
     {
@@ -24,6 +25,7 @@ public class Spaceship {
         this.shipSprite = shipSprite;
         this.position = position;
         projectiles = new ArrayList<>();
+        destroyed = false;
 
     }
 
@@ -66,6 +68,14 @@ public class Spaceship {
     public Sprite getShipSprite()
     {
         return shipSprite;
+    }
+
+    public void destroy() {
+        destroyed = true;
+    }
+
+    public boolean destroyed() {
+        return destroyed;
     }
 
 }

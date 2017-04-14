@@ -37,6 +37,7 @@ public class Game {
     private ArrayList<Spaceship> ships;
     private BoundingBox window;
     private ArrayList<PlayerLife> lives;
+    private CollisionHandler collisionHandler;
 
     public Game(Stage stage){
 
@@ -48,13 +49,14 @@ public class Game {
 
         ships = new ArrayList<>();
         lives = new ArrayList<>();
-        initializeLives(lives);
+        initializeLives();
 
         LevelFactory levelFactory = new LevelFactory(ships, graphicsContext, keyListener);
         Level currentLevel = levelFactory.makeLevel("Level1");
         ships = currentLevel.getShips();  //this is how we will refresh our ships array with each new level
                                     //New levels added once ships.size() == 1 ie. only the user ship remains
 
+        collisionHandler = new CollisionHandler(ships, window, lives);
 
         lastTime = 0;   //variables for timer
         seconds = 0;
@@ -69,7 +71,7 @@ public class Game {
                         lastTime = now;
                         System.out.println(seconds);
                         if(seconds%2 == 0)
-                            createProjectiles(ships);
+                            createProjectiles();
                     }
 
                     update();       //all of the update happens here, could make a class but this is another option, it makes the Game class bigger though
@@ -87,17 +89,18 @@ public class Game {
         checkForGameOver();            //This is how we will transfer over to an endgame menu, similar to how we transfered into Game (just send the stage in,
                                         //and change the scene. Currently, the scene change just takes place in this function, but will eventually change.
         keyListener.listen();
-        updateShips(ships, window);
-        updateProjectiles(ships, window, lives);
-        deleteFlaggedProjectiles(ships);
+        updateShips();
+        updateProjectiles();
+        deleteFlaggedProjectiles();
+        deleteFlaggedShips();
     }
 
     public void draw()
     {
         graphicsContext.clearRect(0, 0, width, height);  //Wipe Screen of all ships
-        drawShips(ships);                   //Draw updated ships
-        drawProjectiles(ships);
-        drawLives(lives);
+        drawShips();                   //Draw updated ships
+        drawProjectiles();
+        drawLives();
     }
 
     public void setupGameFrame()
@@ -120,7 +123,7 @@ public class Game {
         gameSong.playSong();
     }
 
-    public void drawLives(ArrayList<PlayerLife> lives)
+    public void drawLives()
     {
         for(PlayerLife life : lives)
         {
@@ -128,7 +131,7 @@ public class Game {
         }
     }
 
-    public void initializeLives(ArrayList<PlayerLife> lives)
+    public void initializeLives()
     {
         double width = graphicsContext.getCanvas().getWidth();
         PlayerLife life1 = new PlayerLife(width-25, 10);
@@ -139,18 +142,18 @@ public class Game {
         lives.add(life3);
     }
 
-    public void createProjectiles(ArrayList<Spaceship> ships)
+    public void createProjectiles()
     {
         for (Spaceship s : ships) {
             if(!s.getShipType().equals("User")) {
                 ArrayList<Projectile> projectiles = s.getProjectiles();
                 Sprite projectileSprite = new Sprite("Images/laserRed02.png", 8, 15);
-                projectiles.add(new Projectile(s, projectileSprite.getImageView(), 5));
+                projectiles.add(new Projectile(s, projectileSprite, 5));
             }
         }
     }
 
-    public void deleteFlaggedProjectiles(ArrayList<Spaceship> ships)
+    public void deleteFlaggedProjectiles()
     {
         for (Spaceship s : ships) {
             ArrayList<Projectile> projectiles = s.getProjectiles();
@@ -162,27 +165,12 @@ public class Game {
         }
     }
 
-
-    public int checkShipCollisions(int newX, int newY, int curShipIndex, ArrayList<Spaceship> ships)
+    public void deleteFlaggedShips()
     {
-        int shipCollision = -1;
-        Spaceship curShip;
-
-        for(int i = 0; i < ships.size(); i++)
-        {
-            if(i != curShipIndex) //make sure ship isn't being compared with itself
-            {
-                curShip = ships.get(i);
-                Rectangle rect = new Rectangle(); //basically a hitbox for the ship
-                rect.setBounds(curShip.getX(), curShip.getY(), (int) curShip.getW(), (int) curShip.getH());
-                if (rect.contains(newX, newY)) {
-                    shipCollision = i;
-                    return shipCollision;
-                }
-            }
+        for (int i = ships.size()-1; i>=0; i--) {
+            if(ships.get(i).destroyed())
+                ships.remove(i);
         }
-
-        return shipCollision;
     }
 
     public void checkForGameOver(){
@@ -217,51 +205,30 @@ public class Game {
 
     }
 
-    public void updateShips(ArrayList<Spaceship> ships, BoundingBox window)
+    public void updateShips()
     {
-        BoundingBox windowWithShipAdjustment;
-        int maxY = 200;
         int collisionWithShip = -1;
 
         for(Spaceship s: ships)
         {
             Coordinate2D newPosition = s.tryToMove();
 
+            collisionWithShip = collisionHandler.checkShipCollisions(newPosition, s);
+            if(collisionWithShip != -1) {
+                collisionHandler.handleShipCollision(ships.indexOf(s), collisionWithShip);
+                return;
+            }
+
+            if(collisionHandler.shipInBounds(newPosition, s))
+                s.moveShip(newPosition);
+
+
             if(s.getShipType().equals("User"))
-            {
-                //returns ship index if collision otherwise -1
-                collisionWithShip = checkShipCollisions(newPosition.getX(), newPosition.getY(), ships.indexOf(s), ships);
-                if (collisionWithShip != -1)
-                {
-                    System.out.println("ship collision");
-                    explosionSound();
-
-                    //collisionHandler.setGameOverScreen();
-
-                    /*System.out.println("ship collision");
-                    ships.remove(collisionWithShip);
-                    explosionSound();
-                    theStage.setScene(endScene);*/
-                }
-            }
-
-            // get bounding box with adjustment for ship size
-            windowWithShipAdjustment = new BoundingBox(0,0,window.getMaxX()-s.getW(), window.getMaxY()-s.getH());
-
-            if (windowWithShipAdjustment.contains(newPosition.getX(), newPosition.getY()) && collisionWithShip == -1)
-            {
-                if(!(s.shipType.equals("User")&&newPosition.getY()<maxY)) { //just comment this out to work on collision detection with other ships
-                    s.moveShip(newPosition);
-                }
-            }
-
-            if(s.getShipType().equals("User")) {
                 s.tryToShoot();
-            }
         }
     }
 
-    public void drawShips(ArrayList<Spaceship> ships)
+    public void drawShips()
     {
         for(Spaceship s: ships)
         {
@@ -269,45 +236,31 @@ public class Game {
         }
     }
 
-    public void updateProjectiles(ArrayList<Spaceship> ships, BoundingBox window, ArrayList<PlayerLife> lives)
+    public void updateProjectiles()
     {
         Coordinate2D newPos;
 
-        int collisionWithShip = -1; //indicates there is no collision if -1
+        int collisionWithShip = -1;
 
         outerloop: //label used for going back to start of loop
         for (Spaceship s : ships) {
             for (Projectile p : s.getProjectiles()) {
-                if (!window.contains(p.getX(), p.getY()))
+                if(!collisionHandler.projectileInBounds(p))
                 {
                     p.destroy();
-                } else {
+                }
+                else {
                     newPos = p.tryToMove();
-                    collisionWithShip = checkShipCollisions(newPos.getX(), newPos.getY(), ships.indexOf(s), ships);
+                    collisionWithShip = collisionHandler.checkProjectileCollisions(newPos, s);
                     if (collisionWithShip != -1)
                     {
-                        s.getProjectiles().remove(p);
-                        explosionSound();
-                        if(collisionWithShip == 0)
-                        {
-                            //collisionHandler.handleUserHit(lives);
-                            System.out.println("User ship hit");
-                            lives.remove(lives.size() - 1);
-                            System.out.println("num lives: " + lives.size());
-
-                        }
-                        else {
-                            ships.remove(collisionWithShip);
-                        }
-
+                        collisionHandler.handleProjectileCollision(s, p, collisionWithShip);
                         break outerloop; //go to next ship if this ship had a collision
                     }
                     else
                     {
-                        p.setX(newPos.getX());
-                        p.setY(newPos.getY());
+                        p.setPosition(newPos);
                     }
-
                 }
             }
         }
@@ -328,11 +281,11 @@ public class Game {
         graphicsContext.drawImage(explodeImage, x, y, 80, 80);
     }
 
-    public void drawProjectiles(ArrayList<Spaceship> ships)
+    public void drawProjectiles()
     {
         for (Spaceship s : ships) {
             for (Projectile p : s.getProjectiles()) {
-                graphicsContext.drawImage(p.getImageView().getImage(), p.getX(), p.getY(), p.getWidth(), p.getHeight());
+                p.display(graphicsContext);
             }
         }
     }

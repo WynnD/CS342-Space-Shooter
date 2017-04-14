@@ -36,13 +36,8 @@ class ShootOneBullet implements ShootBehavior {
                 MediaPlayer mediaPlayer2 = new MediaPlayer(sound2);
                 mediaPlayer2.play();
 
-
-                String projectileImageName = "Images/laserGreen04.png";
-                Image projectileImage = new Image(new File(projectileImageName).toURI().toString());
-                ImageView projectileImageView = new ImageView(projectileImage);
-                projectileImageView.setFitHeight(15);
-                projectileImageView.setFitWidth(8);
-                projectiles.add(new Projectile(shipThatIsFiring, projectileImageView, 8));
+                Sprite projectileSprite = new Sprite("Images/laserGreen04.png", 8, 15);
+                projectiles.add(new Projectile(shipThatIsFiring, projectileSprite, 8));
                 alreadyShot = true;
             }
         }

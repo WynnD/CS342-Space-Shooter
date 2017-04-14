@@ -12,19 +12,19 @@ public class Projectile {
     private boolean destroyed;
     private int damageOnHit;
     private int verticalSpeed;
-    //    private MoveBehavior moveBehavior;
+    //private MoveBehavior moveBehavior;
     private ImageView imageView;
     private int width,height;
     private Coordinate2D position;
 
 
-    public Projectile(Spaceship shipThatIsFiring, ImageView imageView, int verticalSpeed) {
-        this.imageView = imageView;
+    public Projectile(Spaceship shipThatIsFiring, Sprite projectileSprite, int verticalSpeed) {
+        this.imageView = projectileSprite.getImageView();
         this.shipFiredFrom = shipThatIsFiring;
-        width = (int) imageView.boundsInParentProperty().getValue().getWidth();   //DEON: get width and height this way instead of a parameter
-        height = (int) imageView.boundsInParentProperty().getValue().getHeight();
+        width = (int)projectileSprite.getWidth();
+        height = (int)projectileSprite.getHeight();
         position = getStartPosition();
-//        moveBehavior = new MoveBehavior();
+        //moveBehavior = new MoveBehavior();
         this.verticalSpeed = verticalSpeed;
         destroyed = false;
     }
@@ -41,8 +41,13 @@ public class Projectile {
             newPos = new Coordinate2D(position.getX(), position.getY() + verticalSpeed);
         }
         return newPos;
-        //position.translateY(-verticalSpeed);
     }
+
+    public void setPosition(Coordinate2D newPosition)
+    {
+        position = newPosition;
+    }
+
 
     public ImageView getImageView() {
         return imageView;
@@ -107,5 +112,10 @@ public class Projectile {
 
     public boolean destroyed() {
         return destroyed;
+    }
+
+    public void display(GraphicsContext gc)
+    {
+        gc.drawImage(imageView.getImage(), position.getX(), position.getY(), width, height);
     }
 }
