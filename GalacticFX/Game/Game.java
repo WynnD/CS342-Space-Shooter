@@ -4,17 +4,9 @@ import javafx.geometry.BoundingBox;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import javafx.animation.AnimationTimer;
-import javafx.scene.control.Label;
-import java.awt.*;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -22,7 +14,6 @@ import java.util.ArrayList;
  */
 public class Game {
     private Scene scene;
-    private Scene endScene;
     private Stage stage;
     private Canvas canvas;
     private GraphicsContext graphicsContext;
@@ -32,36 +23,19 @@ public class Game {
     private int seconds;
     private double width;
     private double height;
-    private BorderPane gameOver;
     private KeyListen keyListener;
     private ArrayList<Spaceship> ships;
     private BoundingBox window;
     private ArrayList<PlayerLife> lives;
     private CollisionHandler collisionHandler;
+    private final AnimationTimer timer;
+    private MusicPlayer gameSong;
 
     public Game(Stage stage){
 
         this.stage = stage;
-        setupGameFrame();   //handles all the scene, canvas, bounding box crap :p
-        playMusic();
-
-        keyListener = new KeyListen(scene);
-
-        ships = new ArrayList<>();
-        lives = new ArrayList<>();
-        initializeLives();
-
-        LevelFactory levelFactory = new LevelFactory(ships, graphicsContext, keyListener);
-        Level currentLevel = levelFactory.makeLevel("Level1");
-        ships = currentLevel.getShips();  //this is how we will refresh our ships array with each new level
-                                    //New levels added once ships.size() == 1 ie. only the user ship remains
-
-        collisionHandler = new CollisionHandler(ships, window, lives);
-
-        lastTime = 0;   //variables for timer
-        seconds = 0;
-
-        new AnimationTimer(){
+        initialize();
+        timer = new AnimationTimer(){
             public void handle(long now){
                 if(stage.getScene() == scene) {
                     //do something every second
@@ -75,13 +49,40 @@ public class Game {
                     }
 
                     update();       //all of the update happens here, could make a class but this is another option, it makes the Game class bigger though
-                                    //NOTE: make sure to look in update for some changes, more comments there
+                    //NOTE: make sure to look in update for some changes, more comments there
                     draw();         //same with draw()
                 }
             }
-        }.start();
+        };
 
+        timer.start();
+    }
 
+    public void initialize()
+    {
+        setupGameFrame();   //handles all the scene, canvas, bounding box crap :p
+        playMusic();
+
+        keyListener = new KeyListen(scene);
+
+        ships = new ArrayList<>();
+        lives = new ArrayList<>();
+        initializeLives();
+
+        LevelFactory levelFactory = new LevelFactory(ships, graphicsContext, keyListener);
+        Level currentLevel = levelFactory.makeLevel("Level1");
+        ships = currentLevel.getShips();  //this is how we will refresh our ships array with each new level
+        //New levels added once ships.size() == 1 ie. only the user ship remains
+
+        collisionHandler = new CollisionHandler(ships, window, lives);
+
+        lastTime = 0;   //variables for timer
+        seconds = 0;
+    }
+
+    public void startTimer()
+    {
+        timer.start();
     }
 
     public void update()
@@ -119,7 +120,7 @@ public class Game {
 
     public void playMusic()
     {
-        MusicPlayer gameSong = new MusicPlayer("Music/Orbit.mp3");
+        gameSong = new MusicPlayer("Music/Orbit.mp3");
         gameSong.playSong();
     }
 
@@ -174,35 +175,18 @@ public class Game {
     }
 
     public void checkForGameOver(){
-        if (ships.size() == 1) {                  //Winner! NOTE: once more levels are added, also check
-                                                                //to make sure currentlevel == finallevel
-            gameOver = new BorderPane();
-            gameOver.setStyle("-fx-background-color: black;");
-            gameOver.setPrefSize(width, height);
-            Label endLabel = new Label("VICTORY");
-            endLabel.setTextFill(Color.GREENYELLOW);
-            Font font = new Font("Arial", 70);
-            endLabel.setFont(font);
-            gameOver.setCenter(endLabel);
-            System.out.println("game over");
-            endScene = new Scene(gameOver);
-            stage.setScene(endScene);
+        if (ships.size() == 1) {                         //Winner! NOTE: once more levels are added, also check
+            gameSong.pauseSong();
+            timer.stop();                                                 //to make sure currentlevel == finallevel
+            new EndGameMenu(this, stage, "victory");
+            stage.show();
         }
-
         else if (lives.size() == 0){
-            gameOver = new BorderPane();                       //Loser
-            gameOver.setStyle("-fx-background-color: black;");
-            gameOver.setPrefSize(width, height);
-            Label endLabel = new Label("DEFEAT");
-            endLabel.setTextFill(Color.RED);
-            Font font = new Font("Arial", 70);
-            endLabel.setFont(font);
-            gameOver.setCenter(endLabel);
-            System.out.println("game over");
-            endScene = new Scene(gameOver);
-            stage.setScene(endScene);
+            gameSong.pauseSong();
+            timer.stop();
+            new EndGameMenu(this, stage, "game over");
+            stage.show();
         }
-
     }
 
     public void updateShips()
@@ -264,21 +248,6 @@ public class Game {
                 }
             }
         }
-    }
-
-    public void explosionSound()
-    {
-        String musicFile2 = "Music/boom.mp3";
-        Media sound2 = new Media(new File(musicFile2).toURI().toString());
-        MediaPlayer mediaPlayer2 = new MediaPlayer(sound2);
-        mediaPlayer2.play();
-    }
-
-    public void drawExplosion(double x, double y)
-    {
-        String imgName = "Images/explosion.png";
-        javafx.scene.image.Image explodeImage = new javafx.scene.image.Image(new File(imgName).toURI().toString());
-        graphicsContext.drawImage(explodeImage, x, y, 80, 80);
     }
 
     public void drawProjectiles()
