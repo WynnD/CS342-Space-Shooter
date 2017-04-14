@@ -30,6 +30,7 @@ class ShootOneBullet implements ShootBehavior {
 
     public void update(){
         if(keyListener.getSpaceBarPressed()) {
+            //create new projectile
             if(!alreadyShot && shipThatIsFiring.getShipType().equals("User")) {
                 String musicFile2 = "Music/shooting.mp3";
                 Media sound2 = new Media(new File(musicFile2).toURI().toString());

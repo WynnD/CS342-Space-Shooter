@@ -29,16 +29,20 @@ public class Projectile {
         destroyed = false;
     }
 
-
-    public Coordinate2D tryToMove(){
+    //should this be in shootbehavior?
+    public Coordinate2D tryToMove(int index){
 
         Coordinate2D newPos;
+
         if(shipFiredFrom.getShipType().equals("User")) {
             newPos = new Coordinate2D(position.getX(), position.getY() - verticalSpeed);
         }
         else
         {
-            newPos = new Coordinate2D(position.getX(), position.getY() + verticalSpeed);
+            if(index%2 == 0)
+                newPos = new Coordinate2D(position.getX()+1, position.getY() + verticalSpeed);
+            else
+                newPos = new Coordinate2D(position.getX()-1, position.getY() + verticalSpeed);
         }
         return newPos;
     }

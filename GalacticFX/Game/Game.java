@@ -4,9 +4,12 @@ import javafx.geometry.BoundingBox;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.animation.AnimationTimer;
+
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -35,6 +38,7 @@ public class Game {
 
         this.stage = stage;
         initialize();
+        Image startImage = new Image(new File("Images/start.jpg").toURI().toString());
         timer = new AnimationTimer(){
             public void handle(long now){
                 if(stage.getScene() == scene) {
@@ -44,13 +48,20 @@ public class Game {
                         seconds++;
                         lastTime = now;
                         System.out.println(seconds);
-                        if(seconds%2 == 0)
+                        //if(seconds%2 == 0)
                             createProjectiles();
                     }
 
-                    update();       //all of the update happens here, could make a class but this is another option, it makes the Game class bigger though
-                    //NOTE: make sure to look in update for some changes, more comments there
-                    draw();         //same with draw()
+                    if(seconds > 2) {
+                        update();       //all of the update happens here, could make a class but this is another option, it makes the Game class bigger though
+                        //NOTE: make sure to look in update for some changes, more comments there
+                        draw();         //same with draw()
+                    }
+                    else
+                    {
+                        //display start! message, gives user time before enemies attack
+                        graphicsContext.drawImage(startImage, 100, 300, 350, 100);
+                    }
                 }
             }
         };
@@ -225,24 +236,21 @@ public class Game {
         Coordinate2D newPos;
 
         int collisionWithShip = -1;
+        int i = 0;
 
         outerloop: //label used for going back to start of loop
         for (Spaceship s : ships) {
+            i++;
             for (Projectile p : s.getProjectiles()) {
-                if(!collisionHandler.projectileInBounds(p))
-                {
+                if (!collisionHandler.projectileInBounds(p)) {
                     p.destroy();
-                }
-                else {
-                    newPos = p.tryToMove();
+                } else {
+                    newPos = p.tryToMove(i);
                     collisionWithShip = collisionHandler.checkProjectileCollisions(newPos, s);
-                    if (collisionWithShip != -1)
-                    {
+                    if (collisionWithShip != -1) {
                         collisionHandler.handleProjectileCollision(s, p, collisionWithShip);
                         break outerloop; //go to next ship if this ship had a collision
-                    }
-                    else
-                    {
+                    } else {
                         p.setPosition(newPos);
                     }
                 }
