@@ -13,6 +13,7 @@ class UserMoveBehavior implements MoveBehavior {
     private KeyListen keylistener;
     private UserSpaceship ship;
 
+
     public UserMoveBehavior(UserSpaceship ship)
     {
         this.ship = ship;
@@ -22,7 +23,7 @@ class UserMoveBehavior implements MoveBehavior {
     @Override
     public Coordinate2D getNextPosition()
     {
-        Coordinate2D new_position = new Coordinate2D(ship.getX(), ship.getY());
+        Coordinate2D new_position = new Coordinate2D(ship.getPosition());
 
         if (keylistener.getRightKeyPressed()) {
             new_position.translateX(5);
@@ -45,26 +46,28 @@ class HorizontalMoveBehavior implements MoveBehavior {
     private boolean moveRight;
     private boolean moveLeft;
     private int position;
-    private Spaceship ship;
+    private Vector2D velocity;
+    private EnemySpaceship1 ship;
 
-    public HorizontalMoveBehavior(Spaceship ship)
+    public HorizontalMoveBehavior(EnemySpaceship1 ship)
     {
         this.ship = ship;
         this.moveRight = false;
         this.moveLeft = true;
         this.position = 0;
+        this.velocity = ship.getVelocityVector();
     }
 
     @Override
     public Coordinate2D getNextPosition()
     {
-        Coordinate2D new_position = new Coordinate2D(ship.getX(), ship.getY());
+        Coordinate2D new_position = new Coordinate2D(ship.getPosition());
         if(moveLeft){
             if(position > -100) {
                 position -= 2;
-                new_position.translateX(-2);
             }
             else{
+                ship.setVelocity(new Vector2D(2,0));
                 moveRight = true;
                 moveLeft = false;
             }
@@ -72,13 +75,15 @@ class HorizontalMoveBehavior implements MoveBehavior {
         else if(moveRight){
             if(position < 100){
                 position+=2;
-                new_position.translateX(2);
             }
             else{
+                ship.setVelocity(new Vector2D(-2,0));
                 moveLeft = true;
                 moveRight = false;
             }
         }
+
+        new_position.applyVelocity(ship.getVelocityVector());
 
         return new_position;
     }

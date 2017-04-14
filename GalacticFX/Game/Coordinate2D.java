@@ -11,6 +11,11 @@ public class Coordinate2D {
         this.y = y;
     }
 
+    public Coordinate2D(Coordinate2D c) {
+        this.x = c.getX();
+        this.y = c.getY();
+    }
+
     public int getX() {
         return x;
     }
@@ -33,5 +38,10 @@ public class Coordinate2D {
 
     public void translateY(int offset) {
         setY(getY()+offset);
+    }
+
+    public void applyVelocity(Vector2D vector) {
+        this.x += vector.getXComponent();
+        this.y += vector.getYComponent();
     }
 }
