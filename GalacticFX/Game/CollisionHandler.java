@@ -128,5 +128,12 @@ public class CollisionHandler {
         mediaPlayer2.play();
     }
 
+    public void drawExplosion(double x, double y)
+    {
+        String imgName = "Images/explosion.png";
+        javafx.scene.image.Image explodeImage = new javafx.scene.image.Image(new File(imgName).toURI().toString());
+        //graphicsContext.drawImage(explodeImage, x, y, 80, 80);
+    }
+
 }
 
