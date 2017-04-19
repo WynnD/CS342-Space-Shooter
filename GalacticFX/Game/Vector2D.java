@@ -21,7 +21,6 @@ public class Vector2D {
         this.y_component = vec.getYComponent();
     }
 
-
     public double getXComponent() {
         return x_component;
     }
