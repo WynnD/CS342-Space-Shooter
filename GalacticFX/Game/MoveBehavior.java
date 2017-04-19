@@ -120,7 +120,7 @@ class ErraticMoveBehavior implements MoveBehavior {
                 position -= 2;
             }
             else{
-                ship.setVelocity(new Vector2D(2,rand.nextInt()%2));
+                ship.setVelocity(new Vector2D(2,-Math.abs(rand.nextInt()%2)));
                 moveRight = true;
                 moveLeft = false;
             }
@@ -130,7 +130,7 @@ class ErraticMoveBehavior implements MoveBehavior {
                 position+=2;
             }
             else{
-                ship.setVelocity(new Vector2D(-2,rand.nextInt()%2));
+                ship.setVelocity(new Vector2D(-2, Math.abs(rand.nextInt()%2)));
                 moveLeft = true;
                 moveRight = false;
             }
@@ -147,17 +147,15 @@ class CircleMoveBehavior implements MoveBehavior {
 
     private int position;
     private double rad_angle;
-    private int magnitude;
-    private Vector2D velocity;
+    private double magnitude;
     private EnemySpaceship ship;
 
     public CircleMoveBehavior(EnemySpaceship ship)
     {
         this.ship = ship;
         this.position = 0;
-        this.velocity = ship.getVelocityVector();
-        this.rad_angle = 2*Math.PI;
-        this.magnitude = 2;
+        this.rad_angle = 0;
+        this.magnitude = 3;
     }
 
     @Override
@@ -169,7 +167,9 @@ class CircleMoveBehavior implements MoveBehavior {
                 magnitude * Math.sin(rad_angle));
         ship.setVelocity(new_velocity);
 
-        rad_angle += Math.PI/4;
+        if (rad_angle >=2*Math.PI)
+            rad_angle = 0;
+        rad_angle += Math.PI/64;
 
         new_position.applyVelocity(ship.getVelocityVector());
 

@@ -30,11 +30,11 @@ public class LevelFactory {
         if(levelType.equals("Level1")){
 
             Spaceship userShip = shipFactory.makeShip("User", midScreen, (int)height-100);
-            Spaceship enemyShip = shipFactory.makeShip("Enemy1", midScreen, 100);
-            Spaceship enemyShip2 = shipFactory.makeShip("Enemy1", midScreen-70, 50);
-            Spaceship enemyShip3 = shipFactory.makeShip("Enemy1", midScreen-140, 100);
-            Spaceship enemyShip4 = shipFactory.makeShip("Enemy1", midScreen+70, 50);
-            Spaceship enemyShip5 = shipFactory.makeShip("Enemy1", midScreen+140, 100);
+            Spaceship enemyShip = shipFactory.makeShip("SaneEnemy", midScreen, 100);
+            Spaceship enemyShip2 = shipFactory.makeShip("SaneEnemy", midScreen-70, 50);
+            Spaceship enemyShip3 = shipFactory.makeShip("SaneEnemy", midScreen-140, 100);
+            Spaceship enemyShip4 = shipFactory.makeShip("SaneEnemy", midScreen+70, 50);
+            Spaceship enemyShip5 = shipFactory.makeShip("SaneEnemy", midScreen+140, 100);
 
             ships.add(userShip);
             ships.add(enemyShip);
@@ -42,16 +42,14 @@ public class LevelFactory {
             ships.add(enemyShip3);
             ships.add(enemyShip4);
             ships.add(enemyShip5);
-
-            level = new Level(ships, levelType);
 
         } else if(levelType.equals("Level2")) {
             Spaceship userShip = shipFactory.makeShip("User", midScreen, (int)height-100);
-            Spaceship enemyShip = shipFactory.makeShip("Enemy2", midScreen, 100);
-            Spaceship enemyShip2 = shipFactory.makeShip("Enemy2", midScreen-70, 50);
-            Spaceship enemyShip3 = shipFactory.makeShip("Enemy2", midScreen-140, 100);
-            Spaceship enemyShip4 = shipFactory.makeShip("Enemy2", midScreen+70, 50);
-            Spaceship enemyShip5 = shipFactory.makeShip("Enemy2", midScreen+140, 100);
+            Spaceship enemyShip = shipFactory.makeShip("DrunkEnemy", midScreen, 100);
+            Spaceship enemyShip2 = shipFactory.makeShip("DrunkEnemy", midScreen-70, 50);
+            Spaceship enemyShip3 = shipFactory.makeShip("DrunkEnemy", midScreen-140, 100);
+            Spaceship enemyShip4 = shipFactory.makeShip("DrunkEnemy", midScreen+70, 50);
+            Spaceship enemyShip5 = shipFactory.makeShip("DrunkEnemy", midScreen+140, 100);
             ships.add(userShip);
             ships.add(enemyShip);
             ships.add(enemyShip2);
@@ -59,8 +57,24 @@ public class LevelFactory {
             ships.add(enemyShip4);
             ships.add(enemyShip5);
 
-            level = new Level(ships, levelType);
+        } else if(levelType.equals("Level3")) {
+            Spaceship userShip = shipFactory.makeShip("User", midScreen, (int)height-100);
+            Spaceship enemyShip = shipFactory.makeShip("DizzyEnemy", midScreen, 100);
+            Spaceship enemyShip2 = shipFactory.makeShip("DizzyEnemy", midScreen-70, 50);
+            Spaceship enemyShip3 = shipFactory.makeShip("DizzyEnemy", midScreen-140, 100);
+            Spaceship enemyShip4 = shipFactory.makeShip("DizzyEnemy", midScreen+70, 50);
+            Spaceship enemyShip5 = shipFactory.makeShip("DizzyEnemy", midScreen+140, 100);
+            ships.add(userShip);
+            ships.add(enemyShip);
+            ships.add(enemyShip2);
+            ships.add(enemyShip3);
+            ships.add(enemyShip4);
+            ships.add(enemyShip5);
+
         }
+
+        level = new Level(ships, levelType);
+
         return level;
     }
 }

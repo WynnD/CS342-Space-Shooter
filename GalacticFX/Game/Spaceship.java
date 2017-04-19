@@ -58,9 +58,9 @@ public class Spaceship {
         return projectiles;
     }
 
-    public int getX() { return position.getX(); }
+    public double getX() { return position.getX(); }
 
-    public int getY() { return position.getY(); }
+    public double getY() { return position.getY(); }
 
     public double getW() { return shipSprite.getWidth(); }
 
@@ -127,11 +127,11 @@ abstract class EnemySpaceship extends Spaceship {
     }
 }
 
-class EnemySpaceship1 extends EnemySpaceship
+class SaneEnemySpaceship extends EnemySpaceship
 {
     private Vector2D velocity;
 
-    public EnemySpaceship1(String shipType, Sprite shipSprite, Coordinate2D position )
+    public SaneEnemySpaceship(String shipType, Sprite shipSprite, Coordinate2D position )
     {
         super(shipType, shipSprite, position);
         this.velocity = new Vector2D(-2,0);
@@ -147,14 +147,31 @@ class EnemySpaceship1 extends EnemySpaceship
     }
 }
 
-class EnemySpaceship2 extends EnemySpaceship
-{
+class DrunkEnemySpaceship extends EnemySpaceship {
     private Vector2D velocity;
 
-    public EnemySpaceship2(String shipType, Sprite shipSprite, Coordinate2D position )
-    {
+    public DrunkEnemySpaceship(String shipType, Sprite shipSprite, Coordinate2D position) {
         super(shipType, shipSprite, position);
-        this.velocity = new Vector2D(-2,0);
+        this.velocity = new Vector2D(-2, 0);
+        this.moveBehavior = new ErraticMoveBehavior(this);
+    }
+
+    public Vector2D getVelocityVector() {
+        return velocity;
+    }
+
+    public void setVelocity(Vector2D vect) {
+        this.velocity = vect;
+    }
+
+}
+
+class DizzyEnemySpaceship extends EnemySpaceship {
+    private Vector2D velocity;
+
+    public DizzyEnemySpaceship(String shipType, Sprite shipSprite, Coordinate2D position) {
+        super(shipType, shipSprite, position);
+        this.velocity = new Vector2D(-2, 0);
         this.moveBehavior = new CircleMoveBehavior(this);
     }
 
@@ -165,4 +182,5 @@ class EnemySpaceship2 extends EnemySpaceship
     public void setVelocity(Vector2D vect) {
         this.velocity = vect;
     }
+
 }

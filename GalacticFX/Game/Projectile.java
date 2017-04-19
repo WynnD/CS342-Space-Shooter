@@ -57,7 +57,7 @@ public class Projectile {
         return imageView;
     }
 
-    public int getX() {
+    public double getX() {
         return position.getX();
     }
 
@@ -65,7 +65,7 @@ public class Projectile {
         position.setX(x);
     }
 
-    public int getY() {
+    public double getY() {
         return position.getY();
     }
 
@@ -93,14 +93,14 @@ public class Projectile {
         return new Coordinate2D(getStartX(), getStartY());
     }
 
-    private int getStartX() {
-        int shipX = shipFiredFrom.getX();
+    private double getStartX() {
+        double shipX = shipFiredFrom.getX();
         int shipW = (int) shipFiredFrom.getW();
         return shipX+(shipW/2)-(width/2);
     }
 
-    private int getStartY() {
-        int shipY = shipFiredFrom.getY();
+    private double getStartY() {
+        double shipY = shipFiredFrom.getY();
         if(shipFiredFrom.getShipType().equals("User")) {
             return shipY-height;
         }
