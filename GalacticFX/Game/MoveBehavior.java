@@ -1,5 +1,7 @@
 package Game;
 
+import java.util.*;
+
 /**
  * Created by Wynn on 4/12/2017.
  */
@@ -47,9 +49,9 @@ class HorizontalMoveBehavior implements MoveBehavior {
     private boolean moveLeft;
     private int position;
     private Vector2D velocity;
-    private EnemySpaceship1 ship;
+    private EnemySpaceship ship;
 
-    public HorizontalMoveBehavior(EnemySpaceship1 ship)
+    public HorizontalMoveBehavior(EnemySpaceship ship)
     {
         this.ship = ship;
         this.moveRight = false;
@@ -78,6 +80,57 @@ class HorizontalMoveBehavior implements MoveBehavior {
             }
             else{
                 ship.setVelocity(new Vector2D(-2,0));
+                moveLeft = true;
+                moveRight = false;
+            }
+        }
+
+        new_position.applyVelocity(ship.getVelocityVector());
+
+        return new_position;
+    }
+}
+
+
+
+class ErraticMoveBehavior implements MoveBehavior {
+    private Random rand;
+    private boolean moveRight;
+    private boolean moveLeft;
+    private int position;
+    private Vector2D velocity;
+    private EnemySpaceship ship;
+
+    public ErraticMoveBehavior(EnemySpaceship ship)
+    {
+        this.ship = ship;
+        this.moveRight = false;
+        this.moveLeft = true;
+        this.position = 0;
+        this.velocity = ship.getVelocityVector();
+        this.rand = new Random();
+    }
+
+    @Override
+    public Coordinate2D getNextPosition()
+    {
+        Coordinate2D new_position = new Coordinate2D(ship.getPosition());
+        if(moveLeft){
+            if(position > -100) {
+                position -= 2;
+            }
+            else{
+                ship.setVelocity(new Vector2D(rand.nextInt()%3,rand.nextInt()%3));
+                moveRight = true;
+                moveLeft = false;
+            }
+        }
+        else if(moveRight){
+            if(position < 100){
+                position+=2;
+            }
+            else{
+                ship.setVelocity(new Vector2D(rand.nextInt()%3,rand.nextInt()%3));
                 moveLeft = true;
                 moveRight = false;
             }
