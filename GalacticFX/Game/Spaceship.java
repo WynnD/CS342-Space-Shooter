@@ -100,7 +100,23 @@ class UserSpaceship extends Spaceship
 
 }
 
-class EnemySpaceship1 extends Spaceship
+abstract class EnemySpaceship extends Spaceship {
+    private Vector2D velocity;
+
+    public EnemySpaceship(String shipType, Sprite shipSprite, Coordinate2D position) {
+        super(shipType, shipSprite, position);
+    }
+
+    public Vector2D getVelocityVector() {
+        return velocity;
+    }
+
+    public void setVelocity(Vector2D vect) {
+        this.velocity = vect;
+    }
+}
+
+class EnemySpaceship1 extends EnemySpaceship
 {
     private Vector2D velocity;
 
@@ -109,6 +125,26 @@ class EnemySpaceship1 extends Spaceship
         super(shipType, shipSprite, position);
         this.velocity = new Vector2D(-2,0);
         this.moveBehavior = new HorizontalMoveBehavior(this);
+    }
+
+    public Vector2D getVelocityVector() {
+        return velocity;
+    }
+
+    public void setVelocity(Vector2D vect) {
+        this.velocity = vect;
+    }
+}
+
+class EnemySpaceship2 extends EnemySpaceship
+{
+    private Vector2D velocity;
+
+    public EnemySpaceship2(String shipType, Sprite shipSprite, Coordinate2D position )
+    {
+        super(shipType, shipSprite, position);
+        this.velocity = new Vector2D(-2,0);
+        this.moveBehavior = new ErraticMoveBehavior(this);
     }
 
     public Vector2D getVelocityVector() {

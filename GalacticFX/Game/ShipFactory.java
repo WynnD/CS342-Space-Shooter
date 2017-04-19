@@ -29,6 +29,10 @@ public class ShipFactory {
             Sprite enemySprite = new Sprite("Images/enemyRed1.png", 40, 40);
             Spaceship enemyShip = new EnemySpaceship1(shipType, enemySprite, initialPosition);
             return enemyShip;
+        } else if (shipType.equals("Enemy2")) {
+            Sprite enemySprite = new Sprite("Images/enemyRed1.png", 40, 40);
+            Spaceship enemyShip = new EnemySpaceship2(shipType, enemySprite, initialPosition);
+            return enemyShip;
 
             //else if() for other shipTypes "Lvl 1 Enemy", "Lvl 2 Enemy", etc.
         } else {
