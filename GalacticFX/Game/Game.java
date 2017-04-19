@@ -81,7 +81,7 @@ public class Game {
         initializeLives();
 
         LevelFactory levelFactory = new LevelFactory(ships, graphicsContext, keyListener);
-        Level currentLevel = levelFactory.makeLevel("Level1");
+        Level currentLevel = levelFactory.makeLevel("Level2");
         ships = currentLevel.getShips();  //this is how we will refresh our ships array with each new level
         //New levels added once ships.size() == 1 ie. only the user ship remains
 
@@ -180,7 +180,7 @@ public class Game {
     public void deleteFlaggedShips()
     {
         for (int i = ships.size()-1; i>=0; i--) {
-            if(ships.get(i).destroyed())
+            if(ships.get(i).isDestroyed())
                 ships.remove(i);
         }
     }

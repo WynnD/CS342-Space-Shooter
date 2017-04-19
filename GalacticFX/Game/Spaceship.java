@@ -17,7 +17,8 @@ public class Spaceship {
     protected Sprite shipSprite;
     protected ArrayList<Projectile> projectiles;
     protected Coordinate2D position;
-    private boolean destroyed;
+    protected boolean destroyed;
+    protected boolean enemy;
 
     public Spaceship(String shipType, Sprite shipSprite, Coordinate2D position)
     {
@@ -74,8 +75,16 @@ public class Spaceship {
         destroyed = true;
     }
 
-    public boolean destroyed() {
+    public boolean isDestroyed() {
         return destroyed;
+    }
+
+    public boolean isEnemy() {
+        return enemy;
+    }
+
+    public boolean isFriendlyWith(Spaceship other_ship) {
+        return isEnemy() == other_ship.isEnemy();
     }
 
 }
@@ -91,6 +100,7 @@ class UserSpaceship extends Spaceship
         this.keyListener = keyListener;
         this.moveBehavior = new UserMoveBehavior(this);
         this.shootBehavior = new ShootOneBullet(this, keyListener, projectiles);
+        this.enemy = false;
     }
 
 
@@ -100,7 +110,24 @@ class UserSpaceship extends Spaceship
 
 }
 
-class EnemySpaceship1 extends Spaceship
+abstract class EnemySpaceship extends Spaceship {
+    private Vector2D velocity;
+
+    public EnemySpaceship(String shipType, Sprite shipSprite, Coordinate2D position) {
+        super(shipType, shipSprite, position);
+        this.enemy = true;
+    }
+
+    public Vector2D getVelocityVector() {
+        return velocity;
+    }
+
+    public void setVelocity(Vector2D vect) {
+        this.velocity = vect;
+    }
+}
+
+class EnemySpaceship1 extends EnemySpaceship
 {
     private Vector2D velocity;
 
@@ -109,6 +136,26 @@ class EnemySpaceship1 extends Spaceship
         super(shipType, shipSprite, position);
         this.velocity = new Vector2D(-2,0);
         this.moveBehavior = new HorizontalMoveBehavior(this);
+    }
+
+    public Vector2D getVelocityVector() {
+        return velocity;
+    }
+
+    public void setVelocity(Vector2D vect) {
+        this.velocity = vect;
+    }
+}
+
+class EnemySpaceship2 extends EnemySpaceship
+{
+    private Vector2D velocity;
+
+    public EnemySpaceship2(String shipType, Sprite shipSprite, Coordinate2D position )
+    {
+        super(shipType, shipSprite, position);
+        this.velocity = new Vector2D(-2,0);
+        this.moveBehavior = new CircleMoveBehavior(this);
     }
 
     public Vector2D getVelocityVector() {
