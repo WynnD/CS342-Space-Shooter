@@ -180,7 +180,7 @@ public class Game {
     public void deleteFlaggedShips()
     {
         for (int i = ships.size()-1; i>=0; i--) {
-            if(ships.get(i).destroyed())
+            if(ships.get(i).isDestroyed())
                 ships.remove(i);
         }
     }

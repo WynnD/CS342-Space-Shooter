@@ -116,25 +116,60 @@ class ErraticMoveBehavior implements MoveBehavior {
     {
         Coordinate2D new_position = new Coordinate2D(ship.getPosition());
         if(moveLeft){
-            if(position > -100) {
+            if(position > -50) {
                 position -= 2;
             }
             else{
-                ship.setVelocity(new Vector2D(rand.nextInt()%3,rand.nextInt()%3));
+                ship.setVelocity(new Vector2D(2,rand.nextInt()%2));
                 moveRight = true;
                 moveLeft = false;
             }
         }
         else if(moveRight){
-            if(position < 100){
+            if(position < 50){
                 position+=2;
             }
             else{
-                ship.setVelocity(new Vector2D(rand.nextInt()%3,rand.nextInt()%3));
+                ship.setVelocity(new Vector2D(-2,rand.nextInt()%2));
                 moveLeft = true;
                 moveRight = false;
             }
         }
+
+        new_position.applyVelocity(ship.getVelocityVector());
+
+        return new_position;
+    }
+
+}
+
+class CircleMoveBehavior implements MoveBehavior {
+
+    private int position;
+    private double rad_angle;
+    private int magnitude;
+    private Vector2D velocity;
+    private EnemySpaceship ship;
+
+    public CircleMoveBehavior(EnemySpaceship ship)
+    {
+        this.ship = ship;
+        this.position = 0;
+        this.velocity = ship.getVelocityVector();
+        this.rad_angle = 2*Math.PI;
+        this.magnitude = 2;
+    }
+
+    @Override
+    public Coordinate2D getNextPosition()
+    {
+        Coordinate2D new_position = new Coordinate2D(ship.getPosition());
+
+        Vector2D new_velocity = new Vector2D(magnitude * Math.cos(rad_angle),
+                magnitude * Math.sin(rad_angle));
+        ship.setVelocity(new_velocity);
+
+        rad_angle += Math.PI/4;
 
         new_position.applyVelocity(ship.getVelocityVector());
 

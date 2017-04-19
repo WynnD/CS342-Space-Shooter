@@ -33,7 +33,8 @@ public class CollisionHandler {
                 curShip = ships.get(i);
                 //possibly make each ship have a boundingBox?
                 BoundingBox shipHitBox = new BoundingBox(curShip.getX(), curShip.getY(), curShip.getW(), curShip.getH());
-                if (shipHitBox.intersects(newPosition.getX(), newPosition.getY(), ship.getW(), ship.getH())) {
+                if (shipHitBox.intersects(newPosition.getX(), newPosition.getY(), ship.getW(), ship.getH())
+                        && !curShip.isFriendlyWith((ship))) {
                     shipCollision = i;
                     return shipCollision;
                 }
@@ -54,7 +55,7 @@ public class CollisionHandler {
                 curShip = ships.get(i);
                 //possibly make each ship have a boundingBox?
                 BoundingBox shipHitBox = new BoundingBox(curShip.getX(), curShip.getY(), curShip.getW(), curShip.getH());
-                if (shipHitBox.contains(newPosition.getX(), newPosition.getY())){
+                if (shipHitBox.contains(newPosition.getX(), newPosition.getY()) && !curShip.isFriendlyWith((ship))){
                     shipCollision = i;
                     return shipCollision;
                 }

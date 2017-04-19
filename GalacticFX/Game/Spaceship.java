@@ -17,7 +17,8 @@ public class Spaceship {
     protected Sprite shipSprite;
     protected ArrayList<Projectile> projectiles;
     protected Coordinate2D position;
-    private boolean destroyed;
+    protected boolean destroyed;
+    protected boolean enemy;
 
     public Spaceship(String shipType, Sprite shipSprite, Coordinate2D position)
     {
@@ -74,8 +75,16 @@ public class Spaceship {
         destroyed = true;
     }
 
-    public boolean destroyed() {
+    public boolean isDestroyed() {
         return destroyed;
+    }
+
+    public boolean isEnemy() {
+        return enemy;
+    }
+
+    public boolean isFriendlyWith(Spaceship other_ship) {
+        return isEnemy() == other_ship.isEnemy();
     }
 
 }
@@ -91,6 +100,7 @@ class UserSpaceship extends Spaceship
         this.keyListener = keyListener;
         this.moveBehavior = new UserMoveBehavior(this);
         this.shootBehavior = new ShootOneBullet(this, keyListener, projectiles);
+        this.enemy = false;
     }
 
 
@@ -105,6 +115,7 @@ abstract class EnemySpaceship extends Spaceship {
 
     public EnemySpaceship(String shipType, Sprite shipSprite, Coordinate2D position) {
         super(shipType, shipSprite, position);
+        this.enemy = true;
     }
 
     public Vector2D getVelocityVector() {
@@ -144,7 +155,7 @@ class EnemySpaceship2 extends EnemySpaceship
     {
         super(shipType, shipSprite, position);
         this.velocity = new Vector2D(-2,0);
-        this.moveBehavior = new ErraticMoveBehavior(this);
+        this.moveBehavior = new CircleMoveBehavior(this);
     }
 
     public Vector2D getVelocityVector() {
