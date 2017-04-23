@@ -23,6 +23,7 @@ public class Game {
     private Sprite background;
     private StackPane stackPane;
     private long lastTime;
+    private int curSec = 0;
     private int seconds;
     private double width;
     private double height;
@@ -33,6 +34,8 @@ public class Game {
     private CollisionHandler collisionHandler;
     private final AnimationTimer timer;
     private MusicPlayer gameSong;
+    private Level currentLevel;
+    private LevelFactory levelFactory;
 
     public Game(Stage stage){
 
@@ -80,11 +83,9 @@ public class Game {
         lives = new ArrayList<>();
         initializeLives();
 
-        LevelFactory levelFactory = new LevelFactory(ships, graphicsContext, keyListener);
-        Level currentLevel = levelFactory.makeLevel("Level3");
-        ships = currentLevel.getShips();  //this is how we will refresh our ships array with each new level
-        //New levels added once ships.size() == 1 ie. only the user ship remains
-
+        levelFactory = new LevelFactory(ships, graphicsContext, keyListener);
+        currentLevel = levelFactory.makeLevel(1);
+        ships = currentLevel.getShips();
         collisionHandler = new CollisionHandler(ships, window, lives);
 
         lastTime = 0;   //variables for timer
@@ -186,11 +187,22 @@ public class Game {
     }
 
     public void checkForGameOver(){
-        if (ships.size() == 1) {                         //Winner! NOTE: once more levels are added, also check
-            gameSong.pauseSong();
-            timer.stop();                                                 //to make sure currentlevel == finallevel
-            new EndGameMenu(this, stage, "victory");
-            stage.show();
+        if (ships.size() == 1) {
+            if(currentLevel.getLevelType() == 3){
+                gameSong.pauseSong();
+                timer.stop();
+                new EndGameMenu(this, stage, "victory");
+                stage.show();
+              }
+             else
+            {
+                int curLevelType = currentLevel.getLevelType();
+                int newLevel = curLevelType + 1;
+                ships.remove(0);
+                currentLevel = levelFactory.makeLevel(newLevel);
+                ships = currentLevel.getShips();
+                collisionHandler = new CollisionHandler(ships, window, lives);
+             }
         }
         else if (lives.size() == 0){
             gameSong.pauseSong();
@@ -248,7 +260,9 @@ public class Game {
                     newPos = p.tryToMove(i);
                     collisionWithShip = collisionHandler.checkProjectileCollisions(newPos, s);
                     if (collisionWithShip != -1) {
-                        collisionHandler.handleProjectileCollision(s, p, collisionWithShip);
+                        curSec = seconds;
+                        //if(collisionWithShip != 0)
+                             collisionHandler.handleProjectileCollision(s, p, collisionWithShip);
                         break outerloop; //go to next ship if this ship had a collision
                     } else {
                         p.setPosition(newPos);

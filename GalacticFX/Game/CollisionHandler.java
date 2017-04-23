@@ -4,6 +4,7 @@ import java.awt.*;
 import java.io.File;
 import java.util.*;
 import javafx.geometry.BoundingBox;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
@@ -110,6 +111,7 @@ public class CollisionHandler {
             handleUserHit();
         }
         else {
+            //handleEnemyHit()
             ships.remove(shipIndex);
         }
     }
@@ -129,11 +131,11 @@ public class CollisionHandler {
         mediaPlayer2.play();
     }
 
-    public void drawExplosion(double x, double y)
+    public void drawExplosion(double x, double y, GraphicsContext gc)
     {
         String imgName = "Images/explosion.png";
         javafx.scene.image.Image explodeImage = new javafx.scene.image.Image(new File(imgName).toURI().toString());
-        //graphicsContext.drawImage(explodeImage, x, y, 80, 80);
+        gc.drawImage(explodeImage, x, y, 80, 80);
     }
 
 }
