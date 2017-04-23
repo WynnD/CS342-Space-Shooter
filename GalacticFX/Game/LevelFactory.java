@@ -25,9 +25,9 @@ public class LevelFactory {
 
     }
 
-    public Level makeLevel(String levelType){
+    public Level makeLevel(int levelType){
 
-        if(levelType.equals("Level1")){
+        if(levelType == 1){
 
             Spaceship userShip = shipFactory.makeShip("User", midScreen, (int)height-100);
             Spaceship enemyShip = shipFactory.makeShip("SaneEnemy", midScreen, 100);
@@ -43,7 +43,7 @@ public class LevelFactory {
             ships.add(enemyShip4);
             ships.add(enemyShip5);
 
-        } else if(levelType.equals("Level2")) {
+        } else if(levelType == 2) {
             Spaceship userShip = shipFactory.makeShip("User", midScreen, (int)height-100);
             Spaceship enemyShip = shipFactory.makeShip("DrunkEnemy", midScreen, 100);
             Spaceship enemyShip2 = shipFactory.makeShip("DrunkEnemy", midScreen-70, 50);
@@ -57,7 +57,7 @@ public class LevelFactory {
             ships.add(enemyShip4);
             ships.add(enemyShip5);
 
-        } else if(levelType.equals("Level3")) {
+        } else if(levelType == 3) {
             Spaceship userShip = shipFactory.makeShip("User", midScreen, (int)height-100);
             Spaceship enemyShip = shipFactory.makeShip("DizzyEnemy", midScreen, 100);
             Spaceship enemyShip2 = shipFactory.makeShip("DizzyEnemy", midScreen-70, 50);
