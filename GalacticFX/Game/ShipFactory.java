@@ -30,11 +30,11 @@ public class ShipFactory {
             Spaceship enemyShip = new SaneEnemySpaceship(shipType, enemySprite, initialPosition);
             return enemyShip;
         } else if (shipType.equals("DrunkEnemy")) {
-            Sprite enemySprite = new Sprite("Images/enemyRed1.png", 40, 40);
+            Sprite enemySprite = new Sprite("Images/enemyGreen1.png", 40, 40);
             Spaceship enemyShip = new DrunkEnemySpaceship(shipType, enemySprite, initialPosition);
             return enemyShip;
         } else if (shipType.equals("DizzyEnemy")) {
-            Sprite enemySprite = new Sprite("Images/enemyRed1.png", 40, 40);
+            Sprite enemySprite = new Sprite("Images/enemyBlue1.png", 40, 40);
             Spaceship enemyShip = new DizzyEnemySpaceship(shipType, enemySprite, initialPosition);
             return enemyShip;
             //else if() for other shipTypes "Lvl 1 Enemy", "Lvl 2 Enemy", etc.
