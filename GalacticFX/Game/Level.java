@@ -9,6 +9,7 @@ public class Level {
     private ArrayList<Spaceship> ships;
     //private String levelType;
     private int levelType;
+    //private MusicPlayer musicPlayer;
 
     public Level(ArrayList<Spaceship> ships, int levelType){
         this.ships = ships;

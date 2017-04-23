@@ -195,14 +195,14 @@ public class Game {
                 stage.show();
               }
              else
-            {
+              {
                 int curLevelType = currentLevel.getLevelType();
                 int newLevel = curLevelType + 1;
                 ships.remove(0);
                 currentLevel = levelFactory.makeLevel(newLevel);
                 ships = currentLevel.getShips();
                 collisionHandler = new CollisionHandler(ships, window, lives);
-             }
+              }
         }
         else if (lives.size() == 0){
             gameSong.pauseSong();
