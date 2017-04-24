@@ -30,7 +30,7 @@ public class Projectile {
     }
 
     //should this be in shootbehavior?
-    public Coordinate2D tryToMove(int index){
+    public Coordinate2D getNextPosition(int index){
 
         Coordinate2D newPos;
 
@@ -114,7 +114,7 @@ public class Projectile {
         destroyed = true;
     }
 
-    public boolean destroyed() {
+    public boolean isDestroyed() {
         return destroyed;
     }
 

@@ -14,11 +14,13 @@ public class CollisionHandler {
     private ArrayList<Spaceship> ships;
     private ArrayList<PlayerLife> lives;
     private BoundingBox window;
+    private Scoreboard scoreboard;
 
-    public CollisionHandler(ArrayList<Spaceship> ships, BoundingBox window, ArrayList<PlayerLife> lives) {
+    public CollisionHandler(ArrayList<Spaceship> ships, BoundingBox window, ArrayList<PlayerLife> lives, Scoreboard sb) {
         this.ships = ships;
         this.window = window;
         this.lives = lives;
+        this.scoreboard = sb;
     }
 
     //returns index of ship collided with
@@ -111,7 +113,7 @@ public class CollisionHandler {
             handleUserHit();
         }
         else {
-            //handleEnemyHit()
+            handleEnemyHit(shipIndex);
             ships.remove(shipIndex);
         }
     }
@@ -121,6 +123,13 @@ public class CollisionHandler {
         System.out.println("User ship hit");
         lives.remove(lives.size() - 1);
         System.out.println("num lives: " + lives.size());
+    }
+
+    public void handleEnemyHit(int shipIndex) {
+        EnemySpaceship enemy_ship = (EnemySpaceship) ships.get(shipIndex);
+        int enemy_space_ship_points = enemy_ship.getPointsIfKilled();
+        scoreboard.addScore(enemy_space_ship_points);
+        System.out.println("Added " + enemy_space_ship_points + " to score for total of " + scoreboard.getScore() + " points");
     }
 
     public void explosionSound()
