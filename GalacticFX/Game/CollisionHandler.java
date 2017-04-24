@@ -93,11 +93,15 @@ public class CollisionHandler {
         explosionSound();
         if(currentShip == 0) {
             handleUserHit();
-            ships.get(shipCollidedWith).destroy();
+            //ships.get(shipCollidedWith).destroy();
+            handleEnemyHit(shipCollidedWith);
+            ships.remove(shipCollidedWith);
         }
         else if(shipCollidedWith == 0){
             handleUserHit();
-            ships.get(currentShip).destroy();
+            handleEnemyHit(currentShip);
+            //ships.get(currentShip).destroy();
+            ships.remove(currentShip);
         }
 
         //OPTIONS: either game over OR remove ship and take life away
