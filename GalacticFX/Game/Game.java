@@ -216,7 +216,7 @@ public class Game {
                 stage.show();
               }
              else
-            {
+              {
                 int curLevelType = currentLevel.getLevelType();
                 int newLevel = curLevelType + 1;
                 ships.remove(0);
