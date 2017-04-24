@@ -6,6 +6,7 @@ package Game;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -79,6 +80,7 @@ public class EndGameMenu {
         //Make Restart Button
         restartButton = new Button("RESTART");
         restartButton.setStyle("-fx-font: 48 impact; -fx-base: #0de818;");
+        menu.setAlignment(restartButton, Pos.CENTER);
         menu.setBottom(restartButton);
 
     }
