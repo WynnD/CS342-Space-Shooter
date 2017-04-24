@@ -1,6 +1,6 @@
 public abstract class SpaceShip {
     //protected MoveBehavior moveBehavior;
-    //protected ShootBehavior shootBehavior;
+    //protected ShootOneBullet shootBehavior;
     protected int x,y,h,w;
     protected boolean enemy;
 
