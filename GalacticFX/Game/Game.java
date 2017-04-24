@@ -1,11 +1,14 @@
 package Game;
 
+//import com.sun.prism.paint.Color;
 import javafx.geometry.BoundingBox;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.animation.AnimationTimer;
 
@@ -36,6 +39,7 @@ public class Game {
     private MusicPlayer gameSong;
     private Level currentLevel;
     private LevelFactory levelFactory;
+    private Scoreboard scoreboard;
 
     public Game(Stage stage){
 
@@ -48,6 +52,9 @@ public class Game {
                     //do something every second
                     if(now > lastTime + 1_000_000_000)  //put this in shoot behavior
                     {
+                        if (seconds > 2) {
+                            scoreboard.addScore(5);
+                        }
                         seconds++;
                         lastTime = now;
                         System.out.println(seconds);
@@ -86,7 +93,7 @@ public class Game {
         levelFactory = new LevelFactory(ships, graphicsContext, keyListener);
         currentLevel = levelFactory.makeLevel(1);
         ships = currentLevel.getShips();
-        collisionHandler = new CollisionHandler(ships, window, lives);
+        collisionHandler = new CollisionHandler(ships, window, lives, scoreboard);
 
         lastTime = 0;   //variables for timer
         seconds = 0;
@@ -105,12 +112,13 @@ public class Game {
         updateShips();
         updateProjectiles();
         deleteFlaggedProjectiles();
-        deleteFlaggedShips();
+        //deleteFlaggedShips();
     }
 
     public void draw()
     {
         graphicsContext.clearRect(0, 0, width, height);  //Wipe Screen of all ships
+        drawScoreboard();
         drawShips();                   //Draw updated ships
         drawProjectiles();
         drawLives();
@@ -124,10 +132,17 @@ public class Game {
         window = new BoundingBox(0, 0, width, height);
         canvas = new Canvas(width, height);
         graphicsContext = canvas.getGraphicsContext2D();
+        initScoreboard();
         stackPane = new StackPane();
         stackPane.getChildren().addAll(background.getImageView(), canvas);
         scene = new Scene(stackPane);
         stage.setScene(scene);
+    }
+
+    public void initScoreboard() {
+        scoreboard = new Scoreboard();
+        graphicsContext.setFill(Color.WHITE);
+        graphicsContext.setFont(Font.font("Verdana",20));
     }
 
     public void playMusic()
@@ -171,21 +186,27 @@ public class Game {
         for (Spaceship s : ships) {
             ArrayList<Projectile> projectiles = s.getProjectiles();
             for (int i = 0; i < projectiles.size(); ++i) {
-                if (projectiles.get(i).destroyed()) {
+                if (projectiles.get(i).isDestroyed()) {
                     projectiles.remove(i);
                 }
             }
         }
     }
 
+    /*
     public void deleteFlaggedShips()
     {
         for (int i = ships.size()-1; i>=0; i--) {
-            if(ships.get(i).isDestroyed())
+            if(ships.get(i).isDestroyed()) {
+                if (ships.get(i).isEnemy()) {
+                    System.out.println("Added 100 to score for total of " + scoreboard.getScore() + " points");
+                    scoreboard.addScore(100);
+                }
                 ships.remove(i);
+            }
         }
     }
-
+    */
     public void checkForGameOver(){
         if (ships.size() == 1) {
             if(currentLevel.getLevelType() == 3){
@@ -195,14 +216,14 @@ public class Game {
                 stage.show();
               }
              else
-              {
+            {
                 int curLevelType = currentLevel.getLevelType();
                 int newLevel = curLevelType + 1;
                 ships.remove(0);
                 currentLevel = levelFactory.makeLevel(newLevel);
                 ships = currentLevel.getShips();
-                collisionHandler = new CollisionHandler(ships, window, lives);
-              }
+                collisionHandler = new CollisionHandler(ships, window, lives, scoreboard);
+             }
         }
         else if (lives.size() == 0){
             gameSong.pauseSong();
@@ -247,23 +268,24 @@ public class Game {
     {
         Coordinate2D newPos;
 
+        int j = 0;
         int collisionWithShip = -1;
-        int i = 0;
 
-        outerloop: //label used for going back to start of loop
-        for (Spaceship s : ships) {
-            i++;
+        // foreach loop causes checkforcomodificationerror... hmm
+        for (int i = 0; i < ships.size(); i++) {
+            Spaceship s = ships.get(i);
+            j++;
             for (Projectile p : s.getProjectiles()) {
                 if (!collisionHandler.projectileInBounds(p)) {
                     p.destroy();
                 } else {
-                    newPos = p.tryToMove(i);
+                    newPos = p.getNextPosition(j);
                     collisionWithShip = collisionHandler.checkProjectileCollisions(newPos, s);
                     if (collisionWithShip != -1) {
                         curSec = seconds;
                         //if(collisionWithShip != 0)
-                             collisionHandler.handleProjectileCollision(s, p, collisionWithShip);
-                        break outerloop; //go to next ship if this ship had a collision
+                        collisionHandler.handleProjectileCollision(s, p, collisionWithShip);
+                        break; //go to next ship if this ship had a collision
                     } else {
                         p.setPosition(newPos);
                     }
@@ -279,6 +301,10 @@ public class Game {
                 p.display(graphicsContext);
             }
         }
+    }
+
+    public void drawScoreboard() {
+        scoreboard.display(graphicsContext);
     }
 
 }

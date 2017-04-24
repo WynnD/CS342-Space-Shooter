@@ -112,10 +112,16 @@ class UserSpaceship extends Spaceship
 
 abstract class EnemySpaceship extends Spaceship {
     private Vector2D velocity;
+    protected int points_if_killed;
 
     public EnemySpaceship(String shipType, Sprite shipSprite, Coordinate2D position) {
         super(shipType, shipSprite, position);
         this.enemy = true;
+        this.points_if_killed = 50;
+    }
+
+    public int getPointsIfKilled() {
+        return points_if_killed;
     }
 
     public Vector2D getVelocityVector() {
@@ -136,6 +142,7 @@ class SaneEnemySpaceship extends EnemySpaceship
         super(shipType, shipSprite, position);
         this.velocity = new Vector2D(-2,0);
         this.moveBehavior = new HorizontalMoveBehavior(this);
+        this.points_if_killed = 50;
     }
 
     public Vector2D getVelocityVector() {
@@ -154,6 +161,8 @@ class DrunkEnemySpaceship extends EnemySpaceship {
         super(shipType, shipSprite, position);
         this.velocity = new Vector2D(-2, 0);
         this.moveBehavior = new ErraticMoveBehavior(this);
+        this.points_if_killed = 100;
+
     }
 
     public Vector2D getVelocityVector() {
@@ -173,6 +182,7 @@ class DizzyEnemySpaceship extends EnemySpaceship {
         super(shipType, shipSprite, position);
         this.velocity = new Vector2D(-2, 0);
         this.moveBehavior = new CircleMoveBehavior(this);
+        this.points_if_killed = 100;
     }
 
     public Vector2D getVelocityVector() {
