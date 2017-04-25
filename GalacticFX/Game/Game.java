@@ -58,7 +58,7 @@ public class Game {
                         seconds++;
                         lastTime = now;
                         System.out.println(seconds);
-                        //if(seconds%2 == 0)
+                        if(seconds%2 == 0)
                             createProjectiles();
                     }
 
