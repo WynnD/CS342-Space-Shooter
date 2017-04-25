@@ -56,6 +56,7 @@ public class MainMenu {
         startButton.setStyle("-fx-font: 48 impact; -fx-base: #0de818;");
         menu.setCenter(startButton);
 
+
     }
 
     public void buttonActions(){
@@ -75,6 +76,10 @@ public class MainMenu {
         //Menu Music
         menuSong = new MusicPlayer("Music/spaceIntro.mp3");
         menuSong.playSong();
+
+    }
+
+    public void createControlPage(){
 
     }
 
