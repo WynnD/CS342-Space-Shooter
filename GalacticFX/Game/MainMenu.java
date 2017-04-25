@@ -1,6 +1,8 @@
 package Game;
 
 
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.event.*;
 import javafx.stage.Stage;
@@ -17,8 +19,10 @@ public class MainMenu {
     private int height;
     private Game game;
     private Button startButton;
+    private Button controlButton;
     private BorderPane menu;
     private Scene menuScene;
+    private Scene controlScene;
     private Stage stage;
     private MusicPlayer menuSong;
 
@@ -30,6 +34,7 @@ public class MainMenu {
         playMusic();
         createButtons();
         buttonActions();    //this function sets what each button does
+        createControlPage();
 
     }
 
@@ -44,6 +49,7 @@ public class MainMenu {
         menu.setPrefSize(width, height);
 
         menuScene = new Scene(menu);
+
         stage.setScene(menuScene);
 
 
@@ -56,7 +62,11 @@ public class MainMenu {
         startButton.setStyle("-fx-font: 48 impact; -fx-base: #0de818;");
         menu.setCenter(startButton);
 
-
+        controlButton = new Button("CONTROLS");
+        controlButton.setStyle("-fx-font: 48 impact; -fx-base: #0de818;");
+        menu.setAlignment(controlButton, Pos.TOP_CENTER);
+        menu.setMargin(controlButton, new Insets(0, 12, 200, 12));
+        menu.setBottom(controlButton);
     }
 
     public void buttonActions(){
@@ -67,6 +77,15 @@ public class MainMenu {
                 menuSong.pauseSong();
                 System.out.println("start pushed, creating new game");
                 game = new Game(stage);
+            }
+        });
+
+        controlButton.setOnAction(new EventHandler<ActionEvent>(){
+            @Override
+            public void handle(ActionEvent event) {
+                System.out.println("control button pushed");
+                stage.setScene(controlScene);
+                stage.show();
             }
         });
     }
@@ -80,6 +99,24 @@ public class MainMenu {
     }
 
     public void createControlPage(){
+        Sprite background = new Sprite("Images/ControlsPage.jpg", 550, 700);
+        StackPane controlPane = new StackPane();
+
+        Button backButton = new Button("BACK");
+        backButton.setStyle("-fx-font: 48 impact; -fx-base: #0de818;");
+
+        backButton.setOnAction(new EventHandler<ActionEvent>(){
+            @Override
+            public void handle(ActionEvent event) {
+                stage.setScene(menuScene);
+                stage.show();
+            }
+        });
+
+        controlPane.setAlignment(backButton, Pos.BOTTOM_CENTER);
+        controlPane.getChildren().addAll(background.getImageView(), backButton);
+
+        controlScene = new Scene(controlPane);
 
     }
 
